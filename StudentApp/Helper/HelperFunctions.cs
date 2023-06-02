@@ -24,9 +24,6 @@ namespace StudentApp.Helper
 		{
 			var claims = new[] {
 						new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-						new Claim("FirstName",user.FirstName),
-						new Claim("LastName",user.LastName),
-						new Claim("RoleId",user.RoleId.ToString()),
 						new Claim("email", user.email),
 						new Claim("password",user.password)
 					};

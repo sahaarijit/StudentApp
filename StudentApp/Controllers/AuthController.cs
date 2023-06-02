@@ -12,17 +12,14 @@ namespace StudentApp.Controllers
 	public class AuthController : ControllerBase
 	{
 		private ApplicationDbContext _context;
-		private IConfiguration _configuration;
 		private HelperFunctions _helperFunction;
 
-		public AuthController(ApplicationDbContext context, IConfiguration configuration, HelperFunctions helperFunction)
+		public AuthController(ApplicationDbContext context, HelperFunctions helperFunction)
 		{
 			_context = context;
-			_configuration = configuration;
 			_helperFunction = helperFunction;
 		}
 
-		[AllowAnonymous]
 		[HttpPost("signUp")]
 		public IActionResult SignUp(User user)
 		{
@@ -78,7 +75,6 @@ namespace StudentApp.Controllers
 				return Ok(user);
 			}
 		}
-
 	}
 }
 

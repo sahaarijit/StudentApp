@@ -19,10 +19,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
   builder.Configuration.GetConnectionString("DefaultConnection")
   ));
-//fluent validation
 
-builder.Services.AddScoped<IValidator<User>, UserValidator>();
-builder.Services.AddScoped<HelperFunctions>();
 
 //authetication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => {
@@ -39,6 +36,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 
 
 
+
+//fluent validation
+
+builder.Services.AddScoped<IValidator<User>, UserValidator>();
+
+builder.Services.AddScoped<HelperFunctions>();
+
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -47,11 +54,12 @@ if (app.Environment.IsDevelopment()) {
 	app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
 
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseHttpsRedirection();
 
 app.MapControllers();
 
