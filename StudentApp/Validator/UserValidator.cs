@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
-using SampleProject.Models;
+using StudentApp.Models;
 
 
-namespace SampleProject.Validator
+namespace StudentApp.Validator
 {
 	public class UserValidator : AbstractValidator<User>
 	{

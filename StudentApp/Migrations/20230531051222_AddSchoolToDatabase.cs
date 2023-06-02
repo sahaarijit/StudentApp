@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace SampleProject.Migrations
+namespace StudentApp.Migrations
 {
 	/// <inheritdoc />
 	public partial class AddSchoolToDatabase : Migration

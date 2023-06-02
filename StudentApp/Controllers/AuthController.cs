@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using SampleProject.Data;
-using SampleProject.Models;
-using SampleProject.Validator;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
+using StudentApp.Data;
+using StudentApp.Helper;
+using StudentApp.Models;
+using StudentApp.Validator;
 
-namespace SampleProject.Controllers
+namespace StudentApp.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
@@ -15,16 +13,19 @@ namespace SampleProject.Controllers
 	{
 		private ApplicationDbContext _context;
 		private IConfiguration _configuration;
-		public AuthController(ApplicationDbContext context, IConfiguration configuration)
+		private HelperFunctions _helperFunction;
+
+		public AuthController(ApplicationDbContext context, IConfiguration configuration, HelperFunctions helperFunction)
 		{
 			_context = context;
 			_configuration = configuration;
+			_helperFunction = helperFunction;
 		}
 
+		[AllowAnonymous]
 		[HttpPost("signUp")]
 		public IActionResult SignUp(User user)
 		{
-
 			var validator = new UserValidator();
 			var result = validator.Validate(user);
 			if (!result.IsValid) {
@@ -47,28 +48,11 @@ namespace SampleProject.Controllers
 				return BadRequest();
 			}
 			else {
-				var getUser = GetUser(user.FirstName, user.LastName, user.RoleId, user.email, user.password);
+				var getUser = _helperFunction.GetUser(user.FirstName, user.LastName, user.RoleId, user.email, user.password);
 				if (getUser != null) {
 
-					var claims = new[] {
-						new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-						new Claim("FirstName",user.FirstName),
-						new Claim("LastName",user.LastName),
-						new Claim("RoleId",user.RoleId.ToString()),
-						new Claim("email", user.email),
-						new Claim("password",user.password)
-					};
-
-					var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-					var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-					var token = new JwtSecurityToken(
-						_configuration["Jwt:Issuer"],
-						_configuration["Jwt:Audience"],
-						claims,
-						expires: DateTime.UtcNow.AddMinutes(10),
-						signingCredentials: signIn);
-
-					return Ok(new JwtSecurityTokenHandler().WriteToken(token));
+					var token = _helperFunction.GenerateToken(user);
+					return Ok(token);
 				}
 				else {
 					return BadRequest("Incorrect Credinals");
@@ -76,34 +60,24 @@ namespace SampleProject.Controllers
 			}
 		}
 
-		public User GetUser(string firstname, string lastname, int roleId, string email, string password)
-		{
-			return _context.Users.FirstOrDefault(u => u.FirstName == firstname && u.LastName == lastname && u.RoleId == roleId && u.email == email && u.password == password);
-		}
 
-		//[HttpPut]
-		//[Authorize]
-		//[Route("edit")]
-		//public IActionResult Update(User user) {
-		//  var validator = new UserValidator();
-		//  var result = validator.Validate(user);
-		//  if (!result.IsValid) {
-		//    return BadRequest();
-		//  } else {
-		//    _context.Users.Update(user);
-		//    _context.SaveChanges();
-		//    return Ok(user);
-		//  }
-		//}
 
-		[HttpPost]
+		[HttpPut]
+		[Route("edit")]
 		[Authorize]
-		[Route("logout")]
-		public IActionResult logout(string token)
+		public IActionResult Update(User user)
 		{
-
+			var validator = new UserValidator();
+			var result = validator.Validate(user);
+			if (!result.IsValid) {
+				return BadRequest();
+			}
+			else {
+				_context.Users.Update(user);
+				_context.SaveChanges();
+				return Ok(user);
+			}
 		}
-
 
 	}
 }

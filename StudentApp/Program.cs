@@ -2,9 +2,10 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using SampleProject.Data;
-using SampleProject.Models;
-using SampleProject.Validator;
+using StudentApp.Data;
+using StudentApp.Helper;
+using StudentApp.Models;
+using StudentApp.Validator;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +22,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
 //fluent validation
 
 builder.Services.AddScoped<IValidator<User>, UserValidator>();
+builder.Services.AddScoped<HelperFunctions>();
 
 //authetication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => {
@@ -46,6 +48,8 @@ if (app.Environment.IsDevelopment()) {
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

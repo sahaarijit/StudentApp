@@ -4,7 +4,7 @@
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace SampleProject.Migrations
+namespace StudentApp.Migrations
 {
 	/// <inheritdoc />
 	public partial class SeedToDatabase : Migration

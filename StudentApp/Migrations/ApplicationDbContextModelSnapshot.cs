@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using SampleProject.Data;
+using StudentApp.Data;
 
 #nullable disable
 
-namespace SampleProject.Migrations
+namespace StudentApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -22,7 +22,7 @@ namespace SampleProject.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("SampleProject.Model.User", b =>
+            modelBuilder.Entity("StudentApp.Model.User", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
@@ -71,7 +71,7 @@ namespace SampleProject.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("SampleProject.Models.Role", b =>
+            modelBuilder.Entity("StudentApp.Models.Role", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
@@ -121,7 +121,7 @@ namespace SampleProject.Migrations
                         });
                 });
 
-            modelBuilder.Entity("SampleProject.Models.StudentTeacher", b =>
+            modelBuilder.Entity("StudentApp.Models.StudentTeacher", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -159,24 +159,24 @@ namespace SampleProject.Migrations
                     b.ToTable("StudentTeacher");
                 });
 
-            modelBuilder.Entity("SampleProject.Model.User", b =>
+            modelBuilder.Entity("StudentApp.Model.User", b =>
                 {
-                    b.HasOne("SampleProject.Models.Role", null)
+                    b.HasOne("StudentApp.Models.Role", null)
                         .WithMany("Users")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SampleProject.Models.StudentTeacher", b =>
+            modelBuilder.Entity("StudentApp.Models.StudentTeacher", b =>
                 {
-                    b.HasOne("SampleProject.Model.User", "student")
+                    b.HasOne("StudentApp.Model.User", "student")
                         .WithMany()
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SampleProject.Model.User", "teacher")
+                    b.HasOne("StudentApp.Model.User", "teacher")
                         .WithMany()
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -187,7 +187,7 @@ namespace SampleProject.Migrations
                     b.Navigation("teacher");
                 });
 
-            modelBuilder.Entity("SampleProject.Models.Role", b =>
+            modelBuilder.Entity("StudentApp.Models.Role", b =>
                 {
                     b.Navigation("Users");
                 });

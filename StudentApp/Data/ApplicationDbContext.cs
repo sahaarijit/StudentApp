@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SampleProject.Models;
+using StudentApp.Models;
 
 
-namespace SampleProject.Data
+namespace StudentApp.Data
 {
 	public class ApplicationDbContext : DbContext
 	{
@@ -23,9 +23,6 @@ namespace SampleProject.Data
 			modelBuilder.Entity<Role>().HasQueryFilter(x => !x.IsDeleted);
 			modelBuilder.Entity<User>().HasQueryFilter(x => !x.IsDeleted);
 			modelBuilder.Entity<StudentTeacher>().HasQueryFilter(x => !x.IsDeleted);
-
-
-
 
 			//UpdatedAt configuration
 			modelBuilder.Entity<Role>()
@@ -50,9 +47,7 @@ namespace SampleProject.Data
 				  id = 2,
 				  name = "Teacher"
 			  }
-
 			);
-
 		}
 	}
 }
