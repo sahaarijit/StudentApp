@@ -1,5 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using StudentApp.Data;
+using StudentApp.Dto;
 using StudentApp.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -16,16 +17,18 @@ namespace StudentApp.Helper
 			_configuration = configuration;
 
 		}
-		public User GetUser(string firstname, string lastname, int roleId, string email, string password)
+		public User GetUser(string email, string password, int roleId)
 		{
-			return _context.Users.FirstOrDefault(u => u.FirstName == firstname && u.LastName == lastname && u.RoleId == roleId && u.email == email && u.password == password);
+			return _context.Users.FirstOrDefault(u => u.email == email && u.password == password && u.RoleId == roleId);
 		}
-		public string GenerateToken(User user)
+
+		public string GenerateToken(UserDto user)
 		{
 			var claims = new[] {
 						new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
 						new Claim("email", user.email),
-						new Claim("password",user.password)
+						new Claim("password",user.password),
+						new Claim("RoleId",user.RoleId.ToString())
 					};
 
 			var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));

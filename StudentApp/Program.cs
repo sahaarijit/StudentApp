@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using StudentApp.Data;
+using StudentApp.Dto;
 using StudentApp.Helper;
 using StudentApp.Models;
 using StudentApp.Validator;
@@ -40,9 +41,20 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 //fluent validation
 
 builder.Services.AddScoped<IValidator<User>, UserValidator>();
+builder.Services.AddScoped<IValidator<UserDto>, UserDtoValidator>();
 
+//Using Helperfunction
 builder.Services.AddScoped<HelperFunctions>();
 
+builder.Services.AddAuthorization(options => {
+	options.AddPolicy("Student", policy =>
+					  policy.RequireClaim("RoleId", "1"));
+});
+
+builder.Services.AddAuthorization(options => {
+	options.AddPolicy("Teacher", policy =>
+					  policy.RequireClaim("RoleId", "2"));
+});
 
 
 

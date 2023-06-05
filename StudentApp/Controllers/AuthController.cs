@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StudentApp.Data;
+using StudentApp.Dto;
 using StudentApp.Helper;
 using StudentApp.Models;
 using StudentApp.Validator;
@@ -21,7 +22,7 @@ namespace StudentApp.Controllers
 		}
 
 		[HttpPost("signUp")]
-		public IActionResult SignUp(User user)
+		public IActionResult SignUp([FromBody] User user)
 		{
 			var validator = new UserValidator();
 			var result = validator.Validate(user);
@@ -37,15 +38,15 @@ namespace StudentApp.Controllers
 
 
 		[HttpPost("logIn")]
-		public IActionResult LogIn(User user)
+		public IActionResult LogIn([FromBody] UserDto user)
 		{
-			var validator = new UserValidator();
+			var validator = new UserDtoValidator();
 			var result = validator.Validate(user);
 			if (!result.IsValid) {
 				return BadRequest();
 			}
 			else {
-				var getUser = _helperFunction.GetUser(user.FirstName, user.LastName, user.RoleId, user.email, user.password);
+				var getUser = _helperFunction.GetUser(user.email, user.password, user.RoleId);
 				if (getUser != null) {
 
 					var token = _helperFunction.GenerateToken(user);
@@ -62,7 +63,7 @@ namespace StudentApp.Controllers
 		[HttpPut]
 		[Route("edit")]
 		[Authorize]
-		public IActionResult Update(User user)
+		public IActionResult Update([FromBody] User user)
 		{
 			var validator = new UserValidator();
 			var result = validator.Validate(user);
