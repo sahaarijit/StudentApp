@@ -1,12 +1,11 @@
-﻿using StudentApp.Dto;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StudentApp.Models
 {
 
 
-	public class StudentTeacher : StudentTeacherDto
+	public class StudentTeacher
 	{
 		[Key]
 		public int Id { get; set; }

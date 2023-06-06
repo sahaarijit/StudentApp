@@ -26,12 +26,6 @@ namespace StudentApp.Controllers
 						 where user.RoleId == 2
 						 select user.id;
 
-			//var student = from user in _context.Users
-			//			  where user.id == studentTeacher.StudentId
-			//			  select user;
-			//var teacher = from user in _context.Users
-			//			  where user.id == studentTeacher.StudentId
-			//			  select user;
 			var student = _context.Users.Find(studentTeacher.StudentId);
 			var teacher = _context.Users.Find(studentTeacher.TeacherId);
 
