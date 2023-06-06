@@ -42,6 +42,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 
 builder.Services.AddScoped<IValidator<User>, UserValidator>();
 builder.Services.AddScoped<IValidator<UserDto>, UserDtoValidator>();
+builder.Services.AddScoped<IValidator<StudentTeacherDto>, StudentTeacherDtoValidator>();
 
 //Using Helperfunction
 builder.Services.AddScoped<HelperFunctions>();

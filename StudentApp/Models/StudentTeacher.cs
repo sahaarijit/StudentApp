@@ -1,11 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using StudentApp.Dto;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StudentApp.Models
 {
 
 
-	public class StudentTeacher
+	public class StudentTeacher : StudentTeacherDto
 	{
 		[Key]
 		public int Id { get; set; }
@@ -30,7 +31,6 @@ namespace StudentApp.Models
 
 		public User student { get; set; }
 		public User teacher { get; set; }
-
 
 	}
 }
