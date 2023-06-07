@@ -35,8 +35,8 @@ namespace StudentApp.Controllers
 				StudentTeacher studentTeacher1 = new StudentTeacher();
 				studentTeacher1.StudentId = studentTeacher.StudentId;
 				studentTeacher1.TeacherId = studentTeacher.TeacherId;
-				studentTeacher1.student = student;
-				studentTeacher1.teacher = teacher;
+				studentTeacher1.Student = student;
+				studentTeacher1.Teacher = teacher;
 				_context.StudentTeacher.Add(studentTeacher1);
 				_context.SaveChanges();
 				return Ok(studentTeacher1);
