@@ -10,12 +10,17 @@ namespace StudentApp.Models
 		[Column("id", Order = 0)]
 		public int Id { get; set; }
 
-		[ForeignKey("student_id"), DataType("int")]
-		[Column(Order = 1)]
+		[Column("student_id", Order = 1)]
+		public int StudentId { get; set; }
+
+		[Column("teacher_id", Order = 2)]
+		public int TeacherId { get; set; }
+
+		[ForeignKey("StudentId"), DataType("int")]
 		public User Students { get; set; }
 
-		[Column(Order = 2)]
-		[ForeignKey("teacher_id"), DataType("int")]
+
+		[ForeignKey("TeacherId"), DataType("int")]
 		public User Teachers { get; set; }
 	}
 }

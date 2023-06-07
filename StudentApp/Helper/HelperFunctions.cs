@@ -20,15 +20,15 @@
 
 //		public User GetUser(string email, string password, int roleId)
 //		{
-//			return _context.Users.FirstOrDefault(u => u.email == email && u.password == password && u.RoleId == roleId);
+//			return _context.Users.FirstOrDefault(u => u.Email == email && u.Password == password && u. == roleId);
 //		}
 
 //		public string GenerateToken(UserDto user)
 //		{
 //			var claims = new[] {
 //						new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-//						new Claim("email", user.email),
-//						new Claim("password",user.password),
+//						new Claim("Email", user.Email),
+//						new Claim("Password",user.Password),
 //						new Claim("RoleId",user.RoleId.ToString())
 //					};
 

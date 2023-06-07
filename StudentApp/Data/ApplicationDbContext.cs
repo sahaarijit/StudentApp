@@ -38,16 +38,16 @@ namespace StudentApp.Data
 				 .HasDefaultValueSql("GETDATE()");
 
 			//Masterdata or seed data configuration
-			//modelBuilder.Entity<Role>().HasData(
-			//  new Role {
-			//	  Id = 1,
-			//	  Name = "Student"
-			//  },
-			//  new Role {
-			//	  Id = 2,
-			//	  Name = "Teacher"
-			//  }
-			//);
+			modelBuilder.Entity<Role>().HasData(
+			  new Role {
+				  Id = 1,
+				  Name = "Student"
+			  },
+			  new Role {
+				  Id = 2,
+				  Name = "Teacher"
+			  }
+			);
 		}
 	}
 }

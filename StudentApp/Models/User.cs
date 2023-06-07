@@ -27,7 +27,10 @@ namespace StudentApp.Models
 		[Column("password", Order = 4)]
 		public string Password { get; set; }
 
-		[ForeignKey("role_id"), DataType("int")]
+		[Column("role_id", Order = 5)]
+		public int RoleId { get; set; }
+
+		[ForeignKey("RoleId"), DataType("int")]
 		public Role Role { get; set; }
 	}
 }
