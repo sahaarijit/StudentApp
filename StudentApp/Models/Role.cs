@@ -7,11 +7,11 @@ namespace StudentApp.Models
 	public class Role : BaseEntity
 	{
 		[Key]
-		[Column("id")]
+		[Column("id", Order = 0)]
 		public int Id { get; set; }
 
 		[Required]
-		[Column("name")]
+		[Column("name", Order = 1)]
 		public string Name { get; set; }
 	}
 }

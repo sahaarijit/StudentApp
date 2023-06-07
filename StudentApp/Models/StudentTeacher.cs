@@ -7,12 +7,14 @@ namespace StudentApp.Models
 	public class StudentTeacher : BaseEntity
 	{
 		[Key]
-		[Column("id")]
+		[Column("id", Order = 0)]
 		public int Id { get; set; }
 
 		[ForeignKey("student_id"), DataType("int")]
+		[Column(Order = 1)]
 		public User Students { get; set; }
 
+		[Column(Order = 2)]
 		[ForeignKey("teacher_id"), DataType("int")]
 		public User Teachers { get; set; }
 	}
