@@ -11,12 +11,13 @@ namespace StudentApp.Helper
 	{
 		private ApplicationDbContext _context;
 		private IConfiguration _configuration;
+
 		public HelperFunctions(ApplicationDbContext context, IConfiguration configuration)
 		{
 			_context = context;
 			_configuration = configuration;
-
 		}
+
 		public User GetUser(string email, string password, int roleId)
 		{
 			return _context.Users.FirstOrDefault(u => u.email == email && u.password == password && u.RoleId == roleId);

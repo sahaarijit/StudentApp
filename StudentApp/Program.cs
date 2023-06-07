@@ -12,17 +12,14 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
   builder.Configuration.GetConnectionString("DefaultConnection")
   ));
 
-
-//authetication
+// Authetication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => {
 	options.RequireHttpsMetadata = false;
 	options.SaveToken = true;
@@ -35,11 +32,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 	};
 });
 
-
-
-
-//fluent validation
-
+// Validation
 builder.Services.AddScoped<IValidator<User>, UserValidator>();
 builder.Services.AddScoped<IValidator<UserDto>, UserDtoValidator>();
 builder.Services.AddScoped<IValidator<StudentTeacherDto>, StudentTeacherDtoValidator>();
@@ -57,8 +50,6 @@ builder.Services.AddAuthorization(options => {
 					  policy.RequireClaim("RoleId", "2"));
 });
 
-
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -66,7 +57,6 @@ if (app.Environment.IsDevelopment()) {
 	app.UseSwagger();
 	app.UseSwaggerUI();
 }
-
 
 app.UseAuthentication();
 
