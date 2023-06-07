@@ -35,7 +35,7 @@ namespace StudentApp.Models
 		public DateTime? DeletedAt { get; set; }
 
 
-		//public Role Role { get; set; }
+		public ICollection<StudentTeacher> Teachers { get; set; }
 
 	}
 }

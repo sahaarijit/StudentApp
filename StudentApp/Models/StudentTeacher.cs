@@ -10,10 +10,10 @@ namespace StudentApp.Models
 		[Key]
 		public int Id { get; set; }
 
-		[ForeignKey("student")]
+		[ForeignKey("Student")]
 		public int StudentId { get; set; }
 
-		[ForeignKey("teacher")]
+		[ForeignKey("Teacher")]
 		public int TeacherId { get; set; }
 
 
@@ -28,8 +28,8 @@ namespace StudentApp.Models
 		public bool IsDeleted { get; set; } = false;
 		public DateTime? DeletedAt { get; set; }
 
-		public User student { get; set; }
-		public User teacher { get; set; }
+		public virtual User Student { get; set; }
+		public virtual User Teacher { get; set; }
 
 	}
 }

@@ -37,6 +37,18 @@ namespace StudentApp.Data
 				 .Property(s => s.UpdatedAt)
 				 .HasDefaultValueSql("GETDATE()");
 
+			////Many-to-many relationships
+
+			//modelBuilder.Entity<User>()
+			//	.HasMany(p => p.id)
+			//	.WithMany(p =>p.teachers)
+			//	.Map(m => {
+			//		m.MapLeftKey("StudentId");
+			//		m.MapRightKey("TeacherId");
+			//		m.ToTable("StudentTeacher");
+			//	});
+
+
 			//Masterdata or seed data configuration
 			modelBuilder.Entity<Role>().HasData(
 			  new Role {
