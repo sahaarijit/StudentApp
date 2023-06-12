@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using StudentApp.Models;
-
+using StudentApp.Entity;
+using StudentApp.EntityConfiguration;
 
 namespace StudentApp.Data
 {
@@ -13,29 +13,44 @@ namespace StudentApp.Data
 
 		public DbSet<Role> Roles { get; set; }
 		public DbSet<User> Users { get; set; }
+
+		public DbSet<Student> Students { get; set; }
+
+		public DbSet<Teacher> Teachers { get; set; }
+
 		public DbSet<StudentTeacher> StudentTeacher { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);
 
-			// Soft delete configuration
-			modelBuilder.Entity<Role>().HasQueryFilter(x => !x.IsDeleted);
-			modelBuilder.Entity<User>().HasQueryFilter(x => !x.IsDeleted);
-			modelBuilder.Entity<StudentTeacher>().HasQueryFilter(x => !x.IsDeleted);
+			//// Soft delete configuration
+			//modelBuilder.Entity<BaseEntity>().HasQueryFilter(x => !x.IsDeleted);
 
-			//UpdatedAt configuration
-			modelBuilder.Entity<Role>()
-				  .Property(s => s.UpdatedAt)
-				  .HasDefaultValueSql("GETDATE()");
+			////UpdatedAt configuration
+			//modelBuilder.Entity<BaseEntity>()
+			//	  .Property(s => s.UpdatedAt)
+			//	  .HasDefaultValueSql("GETDATE()");
 
-			modelBuilder.Entity<User>()
-				 .Property(s => s.UpdatedAt)
-				 .HasDefaultValueSql("GETDATE()");
+			//modelBuilder.Entity<Role>().HasMany(u => u.users).WithOne(r => r.role).HasForeignKey(u => u.RoleId).OnDelete(DeleteBehavior.Cascade);
+			//modelBuilder.Entity<Student>().HasOne(s => s.user).WithOne(ad => ad.student).OnDelete(DeleteBehavior.Cascade);
 
-			modelBuilder.Entity<StudentTeacher>()
-				 .Property(s => s.UpdatedAt)
-				 .HasDefaultValueSql("GETDATE()");
+			//modelBuilder.Entity<Student>().HasMany(u => u.Students).WithOne(r => r.Student).HasForeignKey(u => u.StudentId).OnDelete(DeleteBehavior.NoAction);
+
+			//modelBuilder.Entity<Teacher>().HasOne(s => s.user).WithOne(ad => ad.teacher).OnDelete(DeleteBehavior.Cascade);
+
+			//modelBuilder.Entity<Teacher>().HasMany(u => u.Teachers).WithOne(r => r.Teacher).HasForeignKey(u => u.TeacherId).OnDelete(DeleteBehavior.NoAction);
+
+			modelBuilder.ApplyConfiguration(new RoleEntityConfiguration());
+
+			modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
+
+			modelBuilder.ApplyConfiguration(new StudentEntityConfiguration());
+
+			modelBuilder.ApplyConfiguration(new TeacherEntityConfiguration());
+
+
+
 
 			//Masterdata or seed data configuration
 			modelBuilder.Entity<Role>().HasData(

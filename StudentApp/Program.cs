@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using StudentApp.Data;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,25 +14,25 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
   builder.Configuration.GetConnectionString("DefaultConnection")
   ));
 
-//// Authetication
-//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => {
-//	options.RequireHttpsMetadata = false;
-//	options.SaveToken = true;
-//	options.TokenValidationParameters = new TokenValidationParameters() {
-//		ValidateIssuer = true,
-//		ValidateAudience = true,
-//		ValidAudience = builder.Configuration["Jwt:Audience"],
-//		ValidIssuer = builder.Configuration["Jwt:Issuer"],
-//		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-//	};
-//});
+// Authetication
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => {
+	options.RequireHttpsMetadata = false;
+	options.SaveToken = true;
+	options.TokenValidationParameters = new TokenValidationParameters() {
+		ValidateIssuer = true,
+		ValidateAudience = true,
+		ValidAudience = builder.Configuration["Jwt:Audience"],
+		ValidIssuer = builder.Configuration["Jwt:Issuer"],
+		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+	};
+});
 
 //// Validation
 //builder.Services.AddScoped<IValidator<User>, UserValidator>();
 //builder.Services.AddScoped<IValidator<UserDto>, UserDtoValidator>();
 //builder.Services.AddScoped<IValidator<StudentTeacherDto>, StudentTeacherDtoValidator>();
 
-////Using Helperfunction
+//Using Helperfunction
 //builder.Services.AddScoped<HelperFunctions>();
 
 

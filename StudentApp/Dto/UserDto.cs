@@ -1,17 +1,11 @@
-﻿//using System.ComponentModel.DataAnnotations;
-
-//namespace StudentApp.Dto
-//{
-//	public class UserDto
-//	{
-
-//		[Required]
-//		public string Email { get; set; }
-
-//		[Required]
-//		public string Password { get; set; }
-
-//		[Required]
-//		public int RoleId { get; set; }
-//	}
-//}
+﻿namespace StudentApp.Dto
+{
+	public class UserDto
+	{
+		public string FirstName { get; set; }
+		public string LastName { get; set; }
+		public int RoleId { get; set; }
+		public string Email { get; set; }
+		public string Password { get; set; }
+	}
+}

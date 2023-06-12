@@ -1,67 +1,82 @@
-﻿//using Microsoft.AspNetCore.Authorization;
-//using Microsoft.AspNetCore.Mvc;
-//using StudentApp.Data;
-//using StudentApp.Models;
-//using StudentApp.Validator;
+﻿using Microsoft.AspNetCore.Mvc;
+using StudentApp.Data;
+using StudentApp.Dto;
+using StudentApp.Entity;
 
-//namespace StudentApp.Controllers
-//{
-//	[Route("api/[controller]")]
-//	[ApiController]
-//	public class StudentController : ControllerBase
-//	{
+namespace StudentApp.Controllers
+{
+	[Route("api/[controller]")]
+	[ApiController]
+	public class StudentController : ControllerBase
+	{
+		private ApplicationDbContext _context;
+		public StudentController(ApplicationDbContext context)
+		{
+			_context = context;
+		}
 
-//		private ApplicationDbContext _context;
+		[HttpPost]
+		public IActionResult Student(StudentDto studentDto)
+		{
+			var user = _context.Users.FirstOrDefault(s => s.Id == studentDto.StudentId && s.RoleId == 1);
+			if (user == null) {
+				return BadRequest("Student is not there with the given id");
+			}
+			else {
+				var student = new Student {
+					StudentId = studentDto.StudentId
+				};
+				_context.Students.Add(student);
+				_context.SaveChanges();
+				return Ok("student created");
+			}
+		}
 
-//		public StudentController(ApplicationDbContext context)
-//		{
-//			_context = context;
-//		}
+		[HttpDelete("{id}")]
+		public IActionResult Delete(int id)
+		{
+			var student = _context.Students.FirstOrDefault(s => s.StudentId == id);
+			if (student == null) {
+				return BadRequest("student not found");
+			}
+			if (student.IsDeleted == false) {
+				student.IsDeleted = true;
+				student.DeletedAt = DateTime.Now;
+				_context.SaveChanges();
+				return Ok("student is successfully deleted");
+			}
+			else {
+				student.IsDeleted = false;
+				student.DeletedAt = null;
+				_context.SaveChanges();
+				return Ok("student is successfully updated");
+			}
+		}
 
-//		[HttpGet]
-//		[Route("GetStudents")]
-//		[Authorize]
-//		public IEnumerable<User> GetStudents()
-//		{
-//			var data = _context.Users.Where(u => u.RoleId == 1);
-//			return data;
-//		}
 
-//		[HttpPut]
-//		[Route("Edit")]
-//		[Authorize]
-//		public IActionResult Edit([FromBody] User user)
-//		{
-//			if (user.RoleId == 2) {
-//				var validator = new UserValidator();
-//				var result = validator.Validate(user);
-//				if (!result.IsValid) {
-//					return BadRequest();
-//				}
-//				else {
-//					_context.Users.Update(user);
-//					_context.SaveChanges();
-//					return Ok(user);
-//				}
-//			}
-//			else {
-//				return BadRequest();
-//			}
+		[HttpPut("{id}")]
+		public IActionResult Put(int id, StudentDto studentDto)
+		{
+			var user = _context.Users.FirstOrDefault(s => s.Id == studentDto.StudentId && s.RoleId == 1);
+			if (user == null) {
+				return BadRequest("Student is not there with the given id");
+			}
+			else {
+				var student = new Student {
+					Id = id,
+					StudentId = studentDto.StudentId
+				};
+				_context.Students.Update(student);
+				_context.SaveChanges();
+				return Ok("student Updated");
+			}
+		}
 
-//		}
-//		[HttpDelete("{id}")]
-//		[Authorize(Policy = "Teacher")]
-//		public IActionResult Delete(int id)
-//		{
-//			var student = _context.Users.Where(u => u.RoleId == 1 && u.id == id).FirstOrDefault();
-//			if (student != null) {
-//				_context.Users.Remove(student);
-//				_context.SaveChanges();
-//				return Ok(student);
-//			}
-//			else {
-//				return BadRequest();
-//			}
-//		}
-//	}
-//}
+		[HttpGet]
+		public IEnumerable<Student> GetStudents()
+		{
+			return _context.Students.Where(s => s.IsDeleted == false);
+		}
+	}
+
+}
