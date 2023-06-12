@@ -53,7 +53,7 @@ namespace StudentApp.Controllers
 				else {
 					var claims = new[] {
 						new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-						new Claim(ClaimTypes.Email, login.Email),
+						new Claim("Email", login.Email),
 						new Claim(ClaimTypes.Role,role)
 					};
 

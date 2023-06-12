@@ -40,7 +40,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 //	options.AddPolicy("Student", policy =>
 //					  policy.RequireClaim("RoleId", "1"));
 //});
-
 //builder.Services.AddAuthorization(options => {
 //	options.AddPolicy("Teacher", policy =>
 //					  policy.RequireClaim("RoleId", "2"));
@@ -48,7 +47,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsProduction()) {
+if (app.Environment.IsDevelopment()) {
 	app.UseSwagger();
 	app.UseSwaggerUI();
 }

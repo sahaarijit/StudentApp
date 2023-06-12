@@ -73,9 +73,10 @@ namespace StudentApp.Controllers
 		}
 
 		[HttpGet]
-		public IEnumerable<Teacher> GetStudents()
+		public IEnumerable<Teacher> GetTeachers()
 		{
 			return _context.Teachers.Where(s => s.IsDeleted == false);
 		}
 	}
 }
+

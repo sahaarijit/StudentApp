@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using StudentApp.Data;
 using StudentApp.Dto;
 using StudentApp.Entity;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace StudentApp.Controllers
 {
@@ -10,12 +12,14 @@ namespace StudentApp.Controllers
 	public class StudentTeacherController : ControllerBase
 	{
 		private ApplicationDbContext _context;
+
 		public StudentTeacherController(ApplicationDbContext context)
 		{
 			_context = context;
 		}
 
 		[HttpPost]
+		[Authorize(Roles = "Teacher")]
 		public IActionResult StudentTeacher(StudentTeacherDto studentTeacher)
 		{
 
@@ -67,5 +71,32 @@ namespace StudentApp.Controllers
 		{
 			return _context.StudentTeacher.Where(s => s.IsDeleted == false);
 		}
+
+		[HttpGet]
+		[Route("assignedStudents")]
+		[Authorize(Roles = "Teacher")]
+		public IActionResult GetResult(string jwtToken)
+		{
+			var handler = new JwtSecurityTokenHandler();
+			var token = handler.ReadJwtToken(jwtToken);
+
+			string email = token.Payload["Email"].ToString();
+			var users = _context.Users.Where(u => u.Email == email);
+			var studentTeacher = from user in users
+								 join teacher in _context.Teachers on user.Id equals teacher.TeacherId
+								 join studentteacher in _context.StudentTeacher on teacher.Id equals studentteacher.TeacherId
+								 join student in _context.Students on studentteacher.StudentId equals student.Id
+								 select new { studentteacher.Id, studentteacher.StudentId, student.user.FirstName, teacher.TeacherId };
+
+			var teacherData = from user in users
+							  join teacher in _context.Teachers on user.Id equals teacher.TeacherId
+							  //join studentteacher in _context.StudentTeacher on teacher.Id equals studentteacher.TeacherId
+							  select new { user.FirstName, teacher.Id };
+
+			var data = new { teacherDetails = teacherData, studentsData = studentTeacher };
+
+			return Ok(data);
+		}
+
 	}
 }
