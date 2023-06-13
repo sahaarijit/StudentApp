@@ -72,6 +72,8 @@ namespace StudentApp.Controllers
 			return _context.StudentTeacher.Where(s => s.IsDeleted == false);
 		}
 
+
+		//Teacher can see list students assigned
 		[HttpGet]
 		[Route("assignedStudents")]
 		[Authorize(Roles = "Teacher")]
@@ -94,6 +96,34 @@ namespace StudentApp.Controllers
 							  select new { user.FirstName, teacher.Id };
 
 			var data = new { teacherDetails = teacherData, studentsData = studentTeacher };
+
+			return Ok(data);
+		}
+
+
+		//student can see list teachers assigned
+		[HttpGet]
+		[Route("assignedTeachers")]
+		[Authorize(Roles = "Student")]
+		public IActionResult GetTeachers(string jwtToken)
+		{
+			var handler = new JwtSecurityTokenHandler();
+			var token = handler.ReadJwtToken(jwtToken);
+
+			string email = token.Payload["Email"].ToString();
+			var users = _context.Users.Where(u => u.Email == email);
+			var studentTeacher = from user in users
+								 join student in _context.Students on user.Id equals student.StudentId
+								 join studentteacher in _context.StudentTeacher on student.Id equals studentteacher.StudentId
+								 join teacher in _context.Teachers on studentteacher.TeacherId equals teacher.Id
+								 select new { studentteacher.Id, studentteacher.TeacherId, teacher.user.FirstName };
+
+			var studentData = from user in users
+							  join student in _context.Students on user.Id equals student.StudentId
+							  //join studentteacher in _context.StudentTeacher on teacher.Id equals studentteacher.TeacherId
+							  select new { user.FirstName, student.Id };
+
+			var data = new { studentsData = studentData, teacherDetails = studentTeacher };
 
 			return Ok(data);
 		}
