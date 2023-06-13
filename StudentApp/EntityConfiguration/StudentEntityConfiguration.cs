@@ -10,7 +10,7 @@ namespace StudentApp.EntityConfiguration
 		{
 			builder.HasKey(s => s.Id);
 			builder.Property(s => s.Id).ValueGeneratedOnAdd().HasColumnName("id").HasColumnOrder(0);
-			builder.Property(s => s.StudentId).HasColumnName("student_id").HasColumnOrder(1);
+			builder.Property(s => s.UserId).HasColumnName("user_id").HasColumnOrder(1);
 			builder.Property(s => s.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("GETDATE()").HasColumnOrder(2);
 			builder.Property(s => s.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("GETDATE()").ValueGeneratedOnAddOrUpdate().HasColumnOrder(3);
 

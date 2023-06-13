@@ -85,13 +85,13 @@ namespace StudentApp.Controllers
 			string email = token.Payload["Email"].ToString();
 			var users = _context.Users.Where(u => u.Email == email);
 			var studentTeacher = from user in users
-								 join teacher in _context.Teachers on user.Id equals teacher.TeacherId
+								 join teacher in _context.Teachers on user.Id equals teacher.UserId
 								 join studentteacher in _context.StudentTeacher on teacher.Id equals studentteacher.TeacherId
 								 join student in _context.Students on studentteacher.StudentId equals student.Id
-								 select new { studentteacher.Id, studentteacher.StudentId, student.user.FirstName, teacher.TeacherId };
+								 select new { studentteacher.Id, studentteacher.StudentId, student.user.FirstName, teacher.UserId };
 
 			var teacherData = from user in users
-							  join teacher in _context.Teachers on user.Id equals teacher.TeacherId
+							  join teacher in _context.Teachers on user.Id equals teacher.UserId
 							  //join studentteacher in _context.StudentTeacher on teacher.Id equals studentteacher.TeacherId
 							  select new { user.FirstName, teacher.Id };
 
@@ -113,13 +113,13 @@ namespace StudentApp.Controllers
 			string email = token.Payload["Email"].ToString();
 			var users = _context.Users.Where(u => u.Email == email);
 			var studentTeacher = from user in users
-								 join student in _context.Students on user.Id equals student.StudentId
+								 join student in _context.Students on user.Id equals student.UserId
 								 join studentteacher in _context.StudentTeacher on student.Id equals studentteacher.StudentId
 								 join teacher in _context.Teachers on studentteacher.TeacherId equals teacher.Id
 								 select new { studentteacher.Id, studentteacher.TeacherId, teacher.user.FirstName };
 
 			var studentData = from user in users
-							  join student in _context.Students on user.Id equals student.StudentId
+							  join student in _context.Students on user.Id equals student.UserId
 							  //join studentteacher in _context.StudentTeacher on teacher.Id equals studentteacher.TeacherId
 							  select new { user.FirstName, student.Id };
 

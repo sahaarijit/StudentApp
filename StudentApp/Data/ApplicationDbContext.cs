@@ -49,7 +49,7 @@ namespace StudentApp.Data
 
 			modelBuilder.ApplyConfiguration(new TeacherEntityConfiguration());
 
-
+			modelBuilder.ApplyConfiguration(new StudentTeacherEntityConfiguration());
 
 
 			//Masterdata or seed data configuration

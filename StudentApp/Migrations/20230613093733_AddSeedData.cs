@@ -17,8 +17,8 @@ namespace StudentApp.Migrations
 				columns: new[] { "id", "created_at", "deleted_at", "name" },
 				values: new object[,]
 				{
-					{ 1, new DateTime(2023, 6, 11, 19, 45, 14, 690, DateTimeKind.Local).AddTicks(6904), null, "Student" },
-					{ 2, new DateTime(2023, 6, 11, 19, 45, 14, 690, DateTimeKind.Local).AddTicks(6920), null, "Teacher" }
+					{ 1, new DateTime(2023, 6, 13, 15, 7, 33, 294, DateTimeKind.Local).AddTicks(1716), null, "Student" },
+					{ 2, new DateTime(2023, 6, 13, 15, 7, 33, 294, DateTimeKind.Local).AddTicks(1730), null, "Teacher" }
 				});
 		}
 

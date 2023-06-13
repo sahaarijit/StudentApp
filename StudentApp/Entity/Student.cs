@@ -10,9 +10,9 @@ namespace StudentApp.Entity
 		public int Id { get; set; }
 
 
-		public int StudentId { get; set; }
+		public int UserId { get; set; }
 
-		[ForeignKey("StudentId"), DataType("int")]
+		[ForeignKey("UserId"), DataType("int")]
 
 		public virtual User user { get; set; }
 

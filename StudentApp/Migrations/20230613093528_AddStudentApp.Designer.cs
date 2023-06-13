@@ -12,8 +12,8 @@ using StudentApp.Data;
 namespace StudentApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230611141514_AddSeedData")]
-    partial class AddSeedData
+    [Migration("20230613093528_AddStudentApp")]
+    partial class AddStudentApp
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -69,24 +69,6 @@ namespace StudentApp.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("roles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAt = new DateTime(2023, 6, 11, 19, 45, 14, 690, DateTimeKind.Local).AddTicks(6904),
-                            IsDeleted = false,
-                            Name = "Student",
-                            UpdatedAt = new DateTime(2023, 6, 11, 19, 45, 14, 690, DateTimeKind.Local).AddTicks(6917)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedAt = new DateTime(2023, 6, 11, 19, 45, 14, 690, DateTimeKind.Local).AddTicks(6920),
-                            IsDeleted = false,
-                            Name = "Teacher",
-                            UpdatedAt = new DateTime(2023, 6, 11, 19, 45, 14, 690, DateTimeKind.Local).AddTicks(6921)
-                        });
                 });
 
             modelBuilder.Entity("StudentApp.Entity.Student", b =>
@@ -117,11 +99,6 @@ namespace StudentApp.Migrations
                         .HasDefaultValue(false)
                         .HasColumnOrder(4);
 
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int")
-                        .HasColumnName("student_id")
-                        .HasColumnOrder(1);
-
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2")
@@ -129,9 +106,14 @@ namespace StudentApp.Migrations
                         .HasColumnOrder(3)
                         .HasDefaultValueSql("GETDATE()");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("user_id")
+                        .HasColumnOrder(1);
+
                     b.HasKey("Id");
 
-                    b.HasIndex("StudentId")
+                    b.HasIndex("UserId")
                         .IsUnique();
 
                     b.ToTable("students");
@@ -141,27 +123,46 @@ namespace StudentApp.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("id")
+                        .HasColumnOrder(0);
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("created_at")
+                        .HasColumnOrder(3)
+                        .HasDefaultValueSql("GETDATE()");
 
                     b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("deleted_at")
+                        .HasColumnOrder(6);
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnOrder(5);
 
                     b.Property<int>("StudentId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("student_id")
+                        .HasColumnOrder(1);
 
                     b.Property<int>("TeacherId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("techer_id")
+                        .HasColumnOrder(2);
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("updated_at")
+                        .HasColumnOrder(4)
+                        .HasDefaultValueSql("GETDATE()");
 
                     b.HasKey("Id");
 
@@ -200,11 +201,6 @@ namespace StudentApp.Migrations
                         .HasDefaultValue(false)
                         .HasColumnOrder(4);
 
-                    b.Property<int>("TeacherId")
-                        .HasColumnType("int")
-                        .HasColumnName("teacher_id")
-                        .HasColumnOrder(1);
-
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2")
@@ -212,9 +208,14 @@ namespace StudentApp.Migrations
                         .HasColumnOrder(3)
                         .HasDefaultValueSql("GETDATE()");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("user_id")
+                        .HasColumnOrder(1);
+
                     b.HasKey("Id");
 
-                    b.HasIndex("TeacherId")
+                    b.HasIndex("UserId")
                         .IsUnique();
 
                     b.ToTable("teachers");
@@ -299,7 +300,7 @@ namespace StudentApp.Migrations
                 {
                     b.HasOne("StudentApp.Entity.User", "user")
                         .WithOne("student")
-                        .HasForeignKey("StudentApp.Entity.Student", "StudentId")
+                        .HasForeignKey("StudentApp.Entity.Student", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -329,7 +330,7 @@ namespace StudentApp.Migrations
                 {
                     b.HasOne("StudentApp.Entity.User", "user")
                         .WithOne("teacher")
-                        .HasForeignKey("StudentApp.Entity.Teacher", "TeacherId")
+                        .HasForeignKey("StudentApp.Entity.Teacher", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

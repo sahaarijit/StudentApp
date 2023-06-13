@@ -55,7 +55,7 @@ namespace StudentApp.Migrations
 				columns: table => new {
 					id = table.Column<int>(type: "int", nullable: false)
 						.Annotation("SqlServer:Identity", "1, 1"),
-					student_id = table.Column<int>(type: "int", nullable: false),
+					user_id = table.Column<int>(type: "int", nullable: false),
 					created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
 					updated_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
 					IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
@@ -64,8 +64,8 @@ namespace StudentApp.Migrations
 				constraints: table => {
 					table.PrimaryKey("PK_students", x => x.id);
 					table.ForeignKey(
-						name: "FK_students_users_student_id",
-						column: x => x.student_id,
+						name: "FK_students_users_user_id",
+						column: x => x.user_id,
 						principalTable: "users",
 						principalColumn: "id",
 						onDelete: ReferentialAction.Cascade);
@@ -76,7 +76,7 @@ namespace StudentApp.Migrations
 				columns: table => new {
 					id = table.Column<int>(type: "int", nullable: false)
 						.Annotation("SqlServer:Identity", "1, 1"),
-					teacher_id = table.Column<int>(type: "int", nullable: false),
+					user_id = table.Column<int>(type: "int", nullable: false),
 					created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
 					updated_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
 					IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
@@ -85,8 +85,8 @@ namespace StudentApp.Migrations
 				constraints: table => {
 					table.PrimaryKey("PK_teachers", x => x.id);
 					table.ForeignKey(
-						name: "FK_teachers_users_teacher_id",
-						column: x => x.teacher_id,
+						name: "FK_teachers_users_user_id",
+						column: x => x.user_id,
 						principalTable: "users",
 						principalColumn: "id",
 						onDelete: ReferentialAction.Cascade);
@@ -95,49 +95,49 @@ namespace StudentApp.Migrations
 			migrationBuilder.CreateTable(
 				name: "student_teacher",
 				columns: table => new {
-					Id = table.Column<int>(type: "int", nullable: false)
+					id = table.Column<int>(type: "int", nullable: false)
 						.Annotation("SqlServer:Identity", "1, 1"),
-					StudentId = table.Column<int>(type: "int", nullable: false),
-					TeacherId = table.Column<int>(type: "int", nullable: false),
-					CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-					UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-					IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-					DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+					student_id = table.Column<int>(type: "int", nullable: false),
+					techer_id = table.Column<int>(type: "int", nullable: false),
+					created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
+					updated_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
+					IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+					deleted_at = table.Column<DateTime>(type: "datetime2", nullable: true)
 				},
 				constraints: table => {
-					table.PrimaryKey("PK_student_teacher", x => x.Id);
+					table.PrimaryKey("PK_student_teacher", x => x.id);
 					table.ForeignKey(
-						name: "FK_student_teacher_students_StudentId",
-						column: x => x.StudentId,
+						name: "FK_student_teacher_students_student_id",
+						column: x => x.student_id,
 						principalTable: "students",
 						principalColumn: "id");
 					table.ForeignKey(
-						name: "FK_student_teacher_teachers_TeacherId",
-						column: x => x.TeacherId,
+						name: "FK_student_teacher_teachers_techer_id",
+						column: x => x.techer_id,
 						principalTable: "teachers",
 						principalColumn: "id");
 				});
 
 			migrationBuilder.CreateIndex(
-				name: "IX_student_teacher_StudentId",
+				name: "IX_student_teacher_student_id",
 				table: "student_teacher",
-				column: "StudentId");
+				column: "student_id");
 
 			migrationBuilder.CreateIndex(
-				name: "IX_student_teacher_TeacherId",
+				name: "IX_student_teacher_techer_id",
 				table: "student_teacher",
-				column: "TeacherId");
+				column: "techer_id");
 
 			migrationBuilder.CreateIndex(
-				name: "IX_students_student_id",
+				name: "IX_students_user_id",
 				table: "students",
-				column: "student_id",
+				column: "user_id",
 				unique: true);
 
 			migrationBuilder.CreateIndex(
-				name: "IX_teachers_teacher_id",
+				name: "IX_teachers_user_id",
 				table: "teachers",
-				column: "teacher_id",
+				column: "user_id",
 				unique: true);
 
 			migrationBuilder.CreateIndex(
