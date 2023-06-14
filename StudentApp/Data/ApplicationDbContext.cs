@@ -23,6 +23,7 @@ namespace StudentApp.Data
 			modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
 			modelBuilder.ApplyConfiguration(new StudentEntityConfiguration());
 			modelBuilder.ApplyConfiguration(new TeacherEntityConfiguration());
+			modelBuilder.ApplyConfiguration(new StudentTeacherEntityConfiguration());
 			#endregion
 
 			#region Seeder Config

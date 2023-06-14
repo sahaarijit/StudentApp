@@ -8,9 +8,9 @@ namespace StudentApp.Entity
 	{
 		public int Id { get; set; }
 
-		public int TeacherId { get; set; }
+		public int UserId { get; set; }
 
-		[ForeignKey("TeacherId"), DataType("int")]
+		[ForeignKey("UserId"), DataType("int")]
 		public virtual User user { get; set; }
 
 		public ICollection<StudentTeacher> Teachers { get; set; }

@@ -24,7 +24,7 @@ namespace StudentApp.Controllers
 			}
 			else {
 				var student = new Student {
-					StudentId = studentDto.StudentId
+					UserId = studentDto.StudentId
 				};
 				_context.Students.Add(student);
 				_context.SaveChanges();
@@ -35,7 +35,7 @@ namespace StudentApp.Controllers
 		[HttpDelete("{id}")]
 		public IActionResult Delete(int id)
 		{
-			var student = _context.Students.FirstOrDefault(s => s.StudentId == id);
+			var student = _context.Students.FirstOrDefault(s => s.UserId == id);
 			if (student == null) {
 				return BadRequest("student not found");
 			}
@@ -64,7 +64,7 @@ namespace StudentApp.Controllers
 			else {
 				var student = new Student {
 					Id = id,
-					StudentId = studentDto.StudentId
+					UserId = studentDto.StudentId
 				};
 				_context.Students.Update(student);
 				_context.SaveChanges();
