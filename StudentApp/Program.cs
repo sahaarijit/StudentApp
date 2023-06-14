@@ -5,16 +5,19 @@ using StudentApp.Data;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+var environment = builder.Environment.IsDevelopment() ? ".development" : "";
+builder.Configuration.AddJsonFile($"appsettings{environment}.json", optional: true, reloadOnChange: true);
 
-// Add services to the container.
+#region Services
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
   builder.Configuration.GetConnectionString("DefaultConnection")
   ));
+#endregion
 
-// Authetication
+#region Authetication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => {
 	options.RequireHttpsMetadata = false;
 	options.SaveToken = true;
@@ -26,6 +29,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
 	};
 });
+#endregion
 
 //// Validation
 //builder.Services.AddScoped<IValidator<User>, UserValidator>();
@@ -46,18 +50,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 //});
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+#region Swagger Config
 if (app.Environment.IsDevelopment()) {
 	app.UseSwagger();
 	app.UseSwaggerUI();
 }
+#endregion
 
 app.UseAuthentication();
-
 app.UseAuthorization();
-
 app.UseHttpsRedirection();
-
 app.MapControllers();
-
 app.Run();

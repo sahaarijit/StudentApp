@@ -6,9 +6,7 @@ namespace StudentApp.Entity
 	[Table("students")]
 	public class Student : BaseEntity
 	{
-
 		public int Id { get; set; }
-
 
 		public int StudentId { get; set; }
 

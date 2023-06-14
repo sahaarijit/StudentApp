@@ -20,7 +20,7 @@ namespace StudentApp.EntityConfiguration
 			builder.Property(s => s.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("GETDATE()").ValueGeneratedOnAddOrUpdate().HasColumnOrder(7);
 
 			// Soft delete configuration
-			builder.Property(r => r.IsDeleted).HasDefaultValue(false).HasColumnOrder(8);
+			builder.Property(r => r.IsDeleted).HasColumnName("is_deleted").HasDefaultValue(false).HasColumnOrder(8);
 			builder.Property(s => s.DeletedAt).HasColumnName("deleted_at").HasDefaultValueSql(null).HasColumnOrder(9);
 		}
 	}
