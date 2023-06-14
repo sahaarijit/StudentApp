@@ -48,6 +48,7 @@ namespace StudentApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false)
+                        .HasColumnName("is_deleted")
                         .HasColumnOrder(4);
 
                     b.Property<string>("Name")
@@ -71,18 +72,18 @@ namespace StudentApp.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2023, 6, 13, 15, 7, 33, 294, DateTimeKind.Local).AddTicks(1716),
+                            CreatedAt = new DateTime(2023, 6, 14, 18, 27, 55, 525, DateTimeKind.Local).AddTicks(5706),
                             IsDeleted = false,
                             Name = "Student",
-                            UpdatedAt = new DateTime(2023, 6, 13, 15, 7, 33, 294, DateTimeKind.Local).AddTicks(1727)
+                            UpdatedAt = new DateTime(2023, 6, 14, 18, 27, 55, 525, DateTimeKind.Local).AddTicks(5718)
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2023, 6, 13, 15, 7, 33, 294, DateTimeKind.Local).AddTicks(1730),
+                            CreatedAt = new DateTime(2023, 6, 14, 18, 27, 55, 525, DateTimeKind.Local).AddTicks(5720),
                             IsDeleted = false,
                             Name = "Teacher",
-                            UpdatedAt = new DateTime(2023, 6, 13, 15, 7, 33, 294, DateTimeKind.Local).AddTicks(1731)
+                            UpdatedAt = new DateTime(2023, 6, 14, 18, 27, 55, 525, DateTimeKind.Local).AddTicks(5721)
                         });
                 });
 
@@ -112,6 +113,7 @@ namespace StudentApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false)
+                        .HasColumnName("is_deleted")
                         .HasColumnOrder(4);
 
                     b.Property<DateTime>("UpdatedAt")
@@ -160,6 +162,7 @@ namespace StudentApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false)
+                        .HasColumnName("is_deleted")
                         .HasColumnOrder(5);
 
                     b.Property<int>("StudentId")
@@ -214,6 +217,7 @@ namespace StudentApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false)
+                        .HasColumnName("is_deleted")
                         .HasColumnOrder(4);
 
                     b.Property<DateTime>("UpdatedAt")
@@ -274,6 +278,7 @@ namespace StudentApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false)
+                        .HasColumnName("is_deleted")
                         .HasColumnOrder(8);
 
                     b.Property<string>("LastName")
