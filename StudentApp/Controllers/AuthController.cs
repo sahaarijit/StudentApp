@@ -5,6 +5,7 @@ using StudentApp.Data;
 using StudentApp.Dto;
 using StudentApp.Entity;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 
 namespace StudentApp.Controllers
@@ -36,8 +37,10 @@ namespace StudentApp.Controllers
 
 			_context.Users.Add(user);
 			_context.SaveChanges();
-			return Ok("User created successfully.");
+			return Ok(new { message = "User successfully created", Status = HttpStatusCode.OK, result = user });
 		}
+
+
 		[HttpPost]
 		[Route("login")]
 		public IActionResult Login(LoginDto login)
@@ -48,7 +51,7 @@ namespace StudentApp.Controllers
 				var getRole = _context.Roles.FirstOrDefault(r => r.Id == roleId);
 				string role = getRole.Name;
 				if (role == null) {
-					return BadRequest("Role not found");
+					return BadRequest(new { error = "Role not found", status = HttpStatusCode.NotFound });
 				}
 				else {
 					var claims = new[] {
@@ -66,11 +69,12 @@ namespace StudentApp.Controllers
 						expires: DateTime.UtcNow.AddMinutes(10),
 						signingCredentials: signIn);
 
-					return Ok(new JwtSecurityTokenHandler().WriteToken(token));
+					var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+					return Ok(new { jwtToken = jwt });
 				}
 			}
 			else {
-				return BadRequest("Invalid Credinals");
+				return BadRequest(new { error = "Invalid Credinals", status = HttpStatusCode.BadRequest });
 			}
 
 		}
@@ -89,37 +93,52 @@ namespace StudentApp.Controllers
 			};
 			_context.Users.Update(user1);
 			_context.SaveChanges();
-			return Ok(user1);
+			return Ok(new { message = "User successfully updated", Status = HttpStatusCode.OK, result = user1 });
 		}
 
 
 		[HttpDelete("{id}")]
+		[Authorize]
 		public IActionResult delete(int id)
 		{
 			var user = _context.Users.FirstOrDefault(s => s.Id == id);
 			if (user == null) {
-				return BadRequest("User is not found");
+				return BadRequest(new { error = "User is not found", status = HttpStatusCode.NotFound });
 			}
 			if (user.IsDeleted == false) {
 				user.IsDeleted = true;
 				user.DeletedAt = DateTime.Now;
 				_context.SaveChanges();
-				return Ok("user is successfully deleted");
+				return Ok(new { message = "user is successfully deleted", status = HttpStatusCode.OK, result = _context.Users.Where(s => s.IsDeleted == false) });
 			}
 			else {
 				user.IsDeleted = false;
 				user.DeletedAt = null;
 				_context.SaveChanges();
-				return Ok("user is successfully updated");
+				return Ok(new { message = "user is successfully updated", status = HttpStatusCode.OK, result = _context.Users.Where(s => s.IsDeleted == false) });
 			}
 		}
 
 		[HttpGet]
-		public IEnumerable<User> users()
+		[Authorize]
+		[Route("getAllUsers")]
+		public IActionResult users()
 		{
-			return _context.Users.Where(s => s.IsDeleted == false);
+			return Ok(new { message = "All users are fetched successfully", status = HttpStatusCode.OK, result = _context.Users.Where(s => s.IsDeleted == false) });
 		}
 
+		[HttpGet("{id}")]
+		[Authorize]
+		public IActionResult User(int id)
+		{
+			var user = _context.Users.FirstOrDefault(s => s.Id == id);
+			if (user == null) {
+				return BadRequest(new { error = "user not found with given id", status = HttpStatusCode.NotFound });
+			}
+			else {
+				return Ok(new { meassage = "User fetched successfully", status = HttpStatusCode.OK, result = user });
+			}
+		}
 	}
 }
 
