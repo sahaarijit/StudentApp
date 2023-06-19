@@ -7,7 +7,7 @@ using System.Net;
 
 namespace StudentApp.Controllers
 {
-	[Route("api/[controller]")]
+	[Route("api/student")]
 	[ApiController]
 	public class StudentController : ControllerBase
 	{

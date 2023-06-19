@@ -4,42 +4,61 @@ using Microsoft.IdentityModel.Tokens;
 using StudentApp.Data;
 using StudentApp.Dto;
 using StudentApp.Entity;
+using StudentApp.Exceptions;
+using StudentApp.Model;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
 
 namespace StudentApp.Controllers
 {
-	[Route("api/[controller]")]
+	[Route("api/auth")]
 	[ApiController]
 	public class AuthController : ControllerBase
 	{
-		private ApplicationDbContext _context;
-		private IConfiguration _configuration;
-		public AuthController(ApplicationDbContext context, IConfiguration configuration)
+		private readonly ApplicationDbContext _context;
+		private readonly IConfiguration _configuration;
+		private readonly ILogger<AuthController> _logger;
+
+		public AuthController(
+			ApplicationDbContext context,
+			IConfiguration configuration,
+			ILogger<AuthController> logger)
 		{
 			_context = context;
 			_configuration = configuration;
+			_logger = logger;
 		}
 
 		[HttpPost]
-		[Route("signUp")]
-		public IActionResult CreateUser([FromBody] UserDto userDto)
+		[Route("signup")]
+		public async Task<IActionResult> CreateUser([FromBody] UserDto userDto)
 		{
-
-			var user = new User {
-				FirstName = userDto.FirstName,
-				LastName = userDto.LastName,
-				RoleId = userDto.RoleId,
-				Email = userDto.Email,
-				Password = userDto.Password
-			};
-
-			_context.Users.Add(user);
-			_context.SaveChanges();
-			return Ok(new { message = "User successfully created", Status = HttpStatusCode.OK, result = user });
+			try {
+				_logger.LogInformation("Signup process initiated...");
+				var role = _context.Roles.First(r => r.Name == userDto.role);
+				if (role != null) {
+					var user = new User {
+						FirstName = userDto.firstName,
+						LastName = userDto.lastName,
+						RoleId = role != null ? role.Id : default,
+						Email = userDto.email,
+						Password = userDto.password
+					};
+					_context.Users.Add(user);
+					_context.SaveChanges();
+					_logger.LogInformation("Process completed...");
+					return Ok(new SuccessResponse(user, "Registration successful"));
+				}
+				else {
+					throw new BadRequestException("Role not found");
+				}
+			}
+			catch (Exception e) {
+				//_logger.LogError(e.StackTrace);
+				return BadRequest(e);
+			}
 		}
-
 
 		[HttpPost]
 		[Route("login")]
@@ -81,25 +100,25 @@ namespace StudentApp.Controllers
 
 		[HttpPut("{id}")]
 		[Authorize]
-		public IActionResult edit(int id, UserDto userDto)
+		public IActionResult Edit(int id, UserDto userDto)
 		{
-			var user1 = new User {
-				Id = id,
-				FirstName = userDto.FirstName,
-				LastName = userDto.LastName,
-				RoleId = userDto.RoleId,
-				Email = userDto.Email,
-				Password = userDto.Password
+			var role = _context.Roles.First(r => r.Name == userDto.role);
+			var user = new User {
+				FirstName = userDto.firstName,
+				LastName = userDto.lastName,
+				RoleId = role != null ? role.Id : default,
+				Email = userDto.email,
+				Password = userDto.password
 			};
-			_context.Users.Update(user1);
+			_context.Users.Update(user);
 			_context.SaveChanges();
-			return Ok(new { message = "User successfully updated", Status = HttpStatusCode.OK, result = user1 });
+			return Ok(new { message = "User successfully updated", Status = HttpStatusCode.OK, result = user });
 		}
 
 
 		[HttpDelete("{id}")]
 		[Authorize]
-		public IActionResult delete(int id)
+		public IActionResult Delete(int id)
 		{
 			var user = _context.Users.FirstOrDefault(s => s.Id == id);
 			if (user == null) {
@@ -122,7 +141,7 @@ namespace StudentApp.Controllers
 		[HttpGet]
 		[Authorize]
 		[Route("getAllUsers")]
-		public IActionResult users()
+		public IActionResult Users()
 		{
 			return Ok(new { message = "All users are fetched successfully", status = HttpStatusCode.OK, result = _context.Users.Where(s => s.IsDeleted == false) });
 		}

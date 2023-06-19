@@ -6,18 +6,21 @@ using StudentApp.Data;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+#region Env settings
 var environment = builder.Environment.IsDevelopment() ? ".development" : "";
 builder.Configuration.AddJsonFile($"appsettings{environment}.json", optional: true, reloadOnChange: true);
+#endregion
 
-
-#region 
-builder.Services.AddControllers();
+#region Builder settings
+builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
   builder.Configuration.GetConnectionString("DefaultConnection")
 ));
+//builder.Logging.AddJsonConsole();
 #endregion
 
 #region Authetication
@@ -40,12 +43,18 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment()) {
 	app.UseSwagger();
 	app.UseSwaggerUI();
+	app.UseDeveloperExceptionPage();
 }
 #endregion
 
+app.UseCors("ApiCorsPolicy");
+//app.UseResponseCompression();
+
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.UseHttpsRedirection();
 app.MapControllers();
 app.AddGlobalErrorHandler();
+
 app.Run();
