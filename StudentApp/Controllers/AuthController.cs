@@ -5,7 +5,7 @@ using StudentApp.Data;
 using StudentApp.Dto;
 using StudentApp.Entity;
 using StudentApp.Exceptions;
-using StudentApp.Model;
+using StudentApp.Types;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
@@ -17,47 +17,51 @@ namespace StudentApp.Controllers
 	public class AuthController : ControllerBase
 	{
 		private readonly ApplicationDbContext _context;
+		private readonly ICustomResponse _response;
 		private readonly IConfiguration _configuration;
 		private readonly ILogger<AuthController> _logger;
 
 		public AuthController(
 			ApplicationDbContext context,
+			ICustomResponse response,
 			IConfiguration configuration,
 			ILogger<AuthController> logger)
 		{
 			_context = context;
+			_response = response;
 			_configuration = configuration;
 			_logger = logger;
 		}
 
 		[HttpPost]
 		[Route("signup")]
-		public async Task<IActionResult> CreateUser([FromBody] UserDto userDto)
+		public async Task<OkObjectResult> CreateUser([FromBody] UserDto userDto)
 		{
-			try {
-				_logger.LogInformation("Signup process initiated...");
-				var role = _context.Roles.First(r => r.Name == userDto.role);
-				if (role != null) {
-					var user = new User {
-						FirstName = userDto.firstName,
-						LastName = userDto.lastName,
-						RoleId = role != null ? role.Id : default,
-						Email = userDto.email,
-						Password = userDto.password
-					};
-					_context.Users.Add(user);
-					_context.SaveChanges();
-					_logger.LogInformation("Process completed...");
-					return Ok(new SuccessResponse(user, "Registration successful"));
-				}
-				else {
-					throw new BadRequestException("Role not found");
-				}
+			_logger.LogInformation("Signup process initiated...");
+			var role = _context.Roles.First(r => r.Name == userDto.role);
+			if (role != null) {
+				var user = new User {
+					FirstName = userDto.firstName,
+					LastName = userDto.lastName,
+					RoleId = role != null ? role.Id : default,
+					Email = userDto.email,
+					Password = userDto.password
+				};
+				_context.Users.Add(user);
+				_context.SaveChanges();
+				_logger.LogInformation("Process completed...");
+				var data = await _response.SuccessResponse(user, "Registration successful");
+				return Ok(data);
 			}
-			catch (Exception e) {
-				//_logger.LogError(e.StackTrace);
-				return BadRequest(e);
+			else {
+				throw new BadRequestException("Role not found");
 			}
+			//try {
+			//}
+			//catch (Exception e) {
+			//	_logger.LogError(e.StackTrace);
+			//	return BadRequest("Role not found");
+			//}
 		}
 
 		[HttpPost]

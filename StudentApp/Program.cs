@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using StudentApp.Configuration;
 using StudentApp.Data;
+using StudentApp.Model;
+using StudentApp.Types;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +23,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
   builder.Configuration.GetConnectionString("DefaultConnection")
 ));
 //builder.Logging.AddJsonConsole();
+#endregion
+
+#region DI settings
+builder.Services.AddScoped<ISuccess, Success>();
+builder.Services.AddScoped<IError, Error>();
+builder.Services.AddScoped<ICustomResponse, CustomResponse>();
 #endregion
 
 #region Authetication
@@ -43,7 +51,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment()) {
 	app.UseSwagger();
 	app.UseSwaggerUI();
-	app.UseDeveloperExceptionPage();
+	//app.UseDeveloperExceptionPage();
 }
 #endregion
 
@@ -54,7 +62,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseHttpsRedirection();
-app.MapControllers();
 app.AddGlobalErrorHandler();
+app.MapControllers();
 
 app.Run();
