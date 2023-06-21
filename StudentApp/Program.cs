@@ -37,6 +37,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 });
 #endregion
 
+//builder.Services.AddScoped<SuccessResponse>();
+//builder.Services.AddSingleton<SuccessResponse>();
+//builder.Services.AddTransient<SuccessResponse>();
+
 var app = builder.Build();
 
 #region Swagger Config

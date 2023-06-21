@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-namespace StudentApp.Model
+﻿namespace StudentApp.Model
 {
 	public class ErrorResponse
 	{
@@ -18,19 +16,20 @@ namespace StudentApp.Model
 
 	public class SuccessResponse
 	{
-		private int? statusCode;
-		private bool? success;
-		private string? message;
-		private dynamic? stackTrace;
-		private dynamic? result;
+		//public int? statusCode;
+		//	public bool? success;
+		public string? message { get; set; }
+		//public dynamic? stackTrace;
+		public dynamic? result { get; set; }
 
-		public SuccessResponse(dynamic? result, string? message)
-			=> new SuccessResponse(result, message) {
-				statusCode = (int)HttpStatusCode.OK,
-				success = true,
-				message = message ?? null,
-				stackTrace = null,
-				result = result
-			};
+		//public SuccessResponse(dynamic? result, string? message)
+		////=> new SuccessResponse(result, message)
+		//{
+		//	result = result ?? null;
+		//	statusCode = (int)HttpStatusCode.OK;
+		//	success = true;
+		//	message = message ?? null;
+		//	stackTrace = null;
+		//}
 	}
 }

@@ -48,7 +48,8 @@ namespace StudentApp.Controllers
 					_context.Users.Add(user);
 					_context.SaveChanges();
 					_logger.LogInformation("Process completed...");
-					return Ok(new SuccessResponse(user, "Registration successful"));
+
+					return Ok(new SuccessResponse { result = user, message = "Registration successful" });
 				}
 				else {
 					throw new BadRequestException("Role not found");
@@ -59,6 +60,8 @@ namespace StudentApp.Controllers
 				return BadRequest(e);
 			}
 		}
+
+
 
 		[HttpPost]
 		[Route("login")]
@@ -139,11 +142,12 @@ namespace StudentApp.Controllers
 		}
 
 		[HttpGet]
-		[Authorize]
+		//[Authorize]
 		[Route("getAllUsers")]
-		public IActionResult Users()
+		public async Task<IActionResult> Users()
 		{
-			return Ok(new { message = "All users are fetched successfully", status = HttpStatusCode.OK, result = _context.Users.Where(s => s.IsDeleted == false) });
+			var data = _context.Users.Where(user => user.IsDeleted == false);
+			return Ok(new SuccessResponse { result = data, message = "All users are fetched successfully" });
 		}
 
 		[HttpGet("{id}")]
@@ -160,8 +164,3 @@ namespace StudentApp.Controllers
 		}
 	}
 }
-
-
-
-
-

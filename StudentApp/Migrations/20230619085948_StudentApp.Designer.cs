@@ -12,8 +12,8 @@ using StudentApp.Data;
 namespace StudentApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230615065147_AddStudentApp")]
-    partial class AddStudentApp
+    [Migration("20230619085948_StudentApp")]
+    partial class StudentApp
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -75,18 +75,18 @@ namespace StudentApp.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2023, 6, 15, 12, 21, 47, 17, DateTimeKind.Local).AddTicks(1931),
+                            CreatedAt = new DateTime(2023, 6, 19, 14, 29, 48, 57, DateTimeKind.Local).AddTicks(5402),
                             IsDeleted = false,
                             Name = "Student",
-                            UpdatedAt = new DateTime(2023, 6, 15, 12, 21, 47, 17, DateTimeKind.Local).AddTicks(1940)
+                            UpdatedAt = new DateTime(2023, 6, 19, 14, 29, 48, 57, DateTimeKind.Local).AddTicks(5413)
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2023, 6, 15, 12, 21, 47, 17, DateTimeKind.Local).AddTicks(1943),
+                            CreatedAt = new DateTime(2023, 6, 19, 14, 29, 48, 57, DateTimeKind.Local).AddTicks(5418),
                             IsDeleted = false,
                             Name = "Teacher",
-                            UpdatedAt = new DateTime(2023, 6, 15, 12, 21, 47, 17, DateTimeKind.Local).AddTicks(1943)
+                            UpdatedAt = new DateTime(2023, 6, 19, 14, 29, 48, 57, DateTimeKind.Local).AddTicks(5418)
                         });
                 });
 
