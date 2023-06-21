@@ -1,5 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
 
 namespace StudentApp.Entity
 {
@@ -21,7 +23,11 @@ namespace StudentApp.Entity
 		[ForeignKey("RoleId"), DataType("int")]
 		public virtual Role role { get; set; }
 
+		[JsonIgnore]
+		[IgnoreDataMember]
 		public virtual Student student { get; set; }
+		[JsonIgnore]
+		[IgnoreDataMember]
 		public virtual Teacher teacher { get; set; }
 	}
 }

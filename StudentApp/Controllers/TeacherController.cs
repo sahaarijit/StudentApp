@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using StudentApp.Data;
 using StudentApp.Dto;
 using StudentApp.Entity;
-using System.Net;
+using StudentApp.Exceptions;
+using StudentApp.Types;
 
 namespace StudentApp.Controllers
 {
@@ -12,19 +13,21 @@ namespace StudentApp.Controllers
 	public class TeacherController : ControllerBase
 	{
 		private ApplicationDbContext _context;
-		public TeacherController(ApplicationDbContext context)
+		ICustomResponse _response;
+		public TeacherController(ApplicationDbContext context, ICustomResponse response)
 		{
 			_context = context;
+			_response = response;
 		}
 
 		[HttpPost]
 		[Authorize(Roles = "Teacher")]
 		[Route("assignTeacher")]
-		public IActionResult Teacher(TeacherDto teacherDto)
+		public async Task<IActionResult> Teacher(TeacherDto teacherDto)
 		{
 			var user = _context.Users.FirstOrDefault(s => s.Id == teacherDto.TeacherId && s.RoleId == 2);
 			if (user == null) {
-				return BadRequest(new { error = "Teacher is not there with the given id", status = HttpStatusCode.NotFound });
+				throw new NotFoundException("Teacher is not there with the given id");
 			}
 			else {
 				var Teacher = new Teacher {
@@ -32,29 +35,32 @@ namespace StudentApp.Controllers
 				};
 				_context.Teachers.Add(Teacher);
 				_context.SaveChanges();
-				return Ok(new { message = "Teacher Created", status = HttpStatusCode.OK, result = Teacher });
+				var data = await _response.SuccessResponse(Teacher, "Teacher Created successfully");
+				return Ok(data);
 			}
 		}
 
 		[HttpDelete("{id}")]
 		[Authorize(Roles = "Teacher")]
-		public IActionResult Delete(int id)
+		public async Task<IActionResult> Delete(int id)
 		{
 			var teacher = _context.Teachers.FirstOrDefault(s => s.Id == id);
 			if (teacher == null) {
-				return BadRequest(new { error = "teacher not found", status = HttpStatusCode.NotFound });
+				throw new NotFoundException("Teacher is not there with the given id");
 			}
-			if (teacher.IsDeleted == false) {
+			else if (teacher.IsDeleted == false) {
 				teacher.IsDeleted = true;
 				teacher.DeletedAt = DateTime.Now;
 				_context.SaveChanges();
-				return Ok(new { message = "teacher is successfully deleted", status = HttpStatusCode.OK, result = _context.Teachers.Where(s => s.IsDeleted == false) });
+				var data = await _response.SuccessResponse(_context.Teachers.Where(s => s.IsDeleted == false), "teacher is successfully deleted");
+				return Ok(data);
 			}
 			else {
 				teacher.IsDeleted = false;
 				teacher.DeletedAt = null;
 				_context.SaveChanges();
-				return Ok(new { message = "teacher is successfully updated", status = HttpStatusCode.OK, result = _context.Teachers.Where(s => s.IsDeleted == false) });
+				var data = await _response.SuccessResponse(_context.Teachers.Where(s => s.IsDeleted == false), "teacher is successfully updated");
+				return Ok(data);
 			}
 		}
 
@@ -88,22 +94,24 @@ namespace StudentApp.Controllers
 		[HttpGet]
 		[Authorize]
 		[Route("getAllTeachers")]
-		public IActionResult GetTeachers()
+		public async Task<IActionResult> GetTeachers()
 		{
-			return Ok(new { message = "All teachers are fetched successfully", status = HttpStatusCode.OK, result = _context.Teachers.Where(s => s.IsDeleted == false) });
+			var data = await _response.SuccessResponse(_context.Teachers.Where(s => s.IsDeleted == false), "All teachers are fetched successfully");
+			return Ok(data);
 		}
 
 		[HttpGet("{id}")]
 		[Authorize]
 
-		public IActionResult result(int id)
+		public async Task<IActionResult> result(int id)
 		{
 			var teacher = _context.Teachers.FirstOrDefault(s => s.Id == id);
 			if (teacher == null) {
-				return BadRequest(new { error = "student not found with given id", status = HttpStatusCode.NotFound });
+				throw new NotFoundException("teacher not found with given id");
 			}
 			else {
-				return Ok(new { message = "teacher fetched successfully", status = HttpStatusCode.OK, result = teacher });
+				var data = await _response.SuccessResponse(teacher, "teacher fetched successfully");
+				return Ok(data);
 			}
 		}
 	}

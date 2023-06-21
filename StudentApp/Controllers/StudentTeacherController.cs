@@ -3,8 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using StudentApp.Data;
 using StudentApp.Dto;
 using StudentApp.Entity;
+using StudentApp.Exceptions;
+using StudentApp.Types;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net;
 
 namespace StudentApp.Controllers
 {
@@ -13,16 +14,18 @@ namespace StudentApp.Controllers
 	public class StudentTeacherController : ControllerBase
 	{
 		private ApplicationDbContext _context;
+		ICustomResponse _response;
 
-		public StudentTeacherController(ApplicationDbContext context)
+		public StudentTeacherController(ApplicationDbContext context, ICustomResponse response)
 		{
 			_context = context;
+			_response = response;
 		}
 
 		[HttpPost]
 		[Authorize(Roles = "Teacher")]
 		[Route("assignStudentTeacher")]
-		public IActionResult StudentTeacher(StudentTeacherDto studentTeacher)
+		public async Task<IActionResult> StudentTeacher(StudentTeacherDto studentTeacher)
 		{
 			try {
 				var studentTeacher1 = new StudentTeacher {
@@ -31,33 +34,36 @@ namespace StudentApp.Controllers
 				};
 				_context.StudentTeacher.Add(studentTeacher1);
 				_context.SaveChanges();
-				return Ok(new { message = "Student and teacher are assigned to each other", status = HttpStatusCode.OK, result = studentTeacher1 });
+				var data = await _response.SuccessResponse(studentTeacher1, "Student and teacher are assigned to each other");
+				return Ok(data);
 			}
 			catch (Exception ex) {
-				return BadRequest(ex.Message);
+				throw new BadRequestException(ex.Message);
 			}
 		}
 
 
 		[HttpDelete("{id}")]
 		[Authorize(Roles = "Teacher")]
-		public IActionResult Delete(int id)
+		public async Task<IActionResult> Delete(int id)
 		{
 			var studetTeacher = _context.StudentTeacher.FirstOrDefault(s => s.Id == id);
 			if (studetTeacher == null) {
-				return BadRequest(new { error = "StudentTeacher not found with given id", status = HttpStatusCode.NotFound });
+				throw new NotFoundException("StudentTeacher not found with given id");
 			}
 			if (studetTeacher.IsDeleted == false) {
 				studetTeacher.IsDeleted = true;
 				studetTeacher.DeletedAt = DateTime.Now;
 				_context.SaveChanges();
-				return Ok(new { message = "StudentTeacher is successfully deleted", status = HttpStatusCode.OK, result = _context.StudentTeacher.Where(s => s.IsDeleted == false) });
+				var data = await _response.SuccessResponse(_context.StudentTeacher.Where(s => s.IsDeleted == false), "StudentTeacher is successfully deleted");
+				return Ok(data);
 			}
 			else {
 				studetTeacher.IsDeleted = false;
 				studetTeacher.DeletedAt = null;
 				_context.SaveChanges();
-				return Ok(new { message = "StudentTeacher is successfully updated", status = HttpStatusCode.OK, result = _context.StudentTeacher.Where(s => s.IsDeleted == false) });
+				var data = await _response.SuccessResponse(_context.StudentTeacher.Where(s => s.IsDeleted == false), "StudentTeacher is successfully updated");
+				return Ok(data);
 			}
 		}
 
@@ -97,13 +103,13 @@ namespace StudentApp.Controllers
 		[HttpGet]
 		[Route("assignedStudents")]
 		[Authorize(Roles = "Teacher")]
-		public IActionResult GetResult(string jwtToken)
+		public async Task<IActionResult> GetResult(string jwtToken)
 		{
 			var handler = new JwtSecurityTokenHandler();
 			var token = handler.ReadJwtToken(jwtToken);
 
 			string email = token.Payload["Email"].ToString();
-			var users = _context.Users.Where(u => u.Email == email);
+			var users = _context.Users.Where(u => u.Email == email && u.RoleId == 2);
 			var studentTeacher = from user in users
 								 join teacher in _context.Teachers on user.Id equals teacher.UserId
 								 join studentteacher in _context.StudentTeacher on teacher.Id equals studentteacher.TeacherId
@@ -114,7 +120,7 @@ namespace StudentApp.Controllers
 							  join teacher in _context.Teachers on user.Id equals teacher.UserId
 							  select new { user.FirstName };
 
-			var data = new { teacherDetails = teacherData, studentsData = studentTeacher };
+			var data = await _response.SuccessResponse(new { teacherDetails = teacherData, studentsData = studentTeacher }, "Here are the students assigned to the teacher");
 
 			return Ok(data);
 		}
@@ -124,13 +130,13 @@ namespace StudentApp.Controllers
 		[HttpGet]
 		[Route("assignedTeachers")]
 		[Authorize(Roles = "Student")]
-		public IActionResult GetTeachers(string jwtToken)
+		public async Task<IActionResult> GetTeachers(string jwtToken)
 		{
 			var handler = new JwtSecurityTokenHandler();
 			var token = handler.ReadJwtToken(jwtToken);
 
 			string email = token.Payload["Email"].ToString();
-			var users = _context.Users.Where(u => u.Email == email);
+			var users = _context.Users.Where(u => u.Email == email && u.RoleId == 1);
 			var studentTeacher = from user in users
 								 join student in _context.Students on user.Id equals student.UserId
 								 join studentteacher in _context.StudentTeacher on student.Id equals studentteacher.StudentId
@@ -141,7 +147,7 @@ namespace StudentApp.Controllers
 							  join student in _context.Students on user.Id equals student.UserId
 							  select new { user.FirstName };
 
-			var data = new { studentsData = studentData, teacherDetails = studentTeacher };
+			var data = await _response.SuccessResponse(new { studentsData = studentData, teacherDetails = studentTeacher }, "Here are the teachers assigned to the student");
 
 			return Ok(data);
 		}

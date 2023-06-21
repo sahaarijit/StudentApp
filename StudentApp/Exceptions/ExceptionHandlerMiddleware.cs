@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using StudentApp.Model;
+using System.Diagnostics;
 using System.Net;
 
 namespace StudentApp.Exceptions
@@ -29,46 +30,57 @@ namespace StudentApp.Exceptions
 		{
 			context.Response.ContentType = "application/json";
 			var response = context.Response;
-			var errorResponse = new ErrorResponse(default, default);
+			var errorResponse = new Error {
+				StatusCode = 0,
+				Message = "",
+				StackTrace = default(StackTrace)
+			};
 
 			switch (exception) {
 				case ApplicationException ex: {
-					if (ex.Message.Contains("Invalid Token")) {
-						response.StatusCode = (int)HttpStatusCode.Forbidden;
-						errorResponse = new ErrorResponse(response.StatusCode, ex.Message);
-						break;
-					}
 					response.StatusCode = (int)HttpStatusCode.BadRequest;
-					errorResponse = new ErrorResponse(response.StatusCode, ex.Message);
+					errorResponse.StatusCode = response.StatusCode;
+					errorResponse.Message = ex.Message;
+					errorResponse.StackTrace = ex.StackTrace;
 					break;
 				}
 				case NotFoundException ex: {
 					response.StatusCode = (int)HttpStatusCode.NotFound;
-					errorResponse = new ErrorResponse(response.StatusCode, ex.Message);
+					errorResponse.StatusCode = response.StatusCode;
+					errorResponse.Message = ex.Message;
+					errorResponse.StackTrace = ex.StackTrace;
 					break;
 				}
 				case UnAuthorizationAccessException ex: {
 					response.StatusCode = (int)HttpStatusCode.Unauthorized;
-					errorResponse = new ErrorResponse(response.StatusCode, ex.Message);
+					errorResponse.StatusCode = response.StatusCode;
+					errorResponse.Message = ex.Message;
+					errorResponse.StackTrace = ex.StackTrace;
 					break;
 				}
 				case ForbiddenException ex: {
 					response.StatusCode = (int)HttpStatusCode.Forbidden;
-					errorResponse = new ErrorResponse(response.StatusCode, ex.Message);
+					errorResponse.StatusCode = response.StatusCode;
+					errorResponse.Message = ex.Message;
+					errorResponse.StackTrace = ex.StackTrace;
 					break;
 				}
 				case BadRequestException ex: {
 					response.StatusCode = (int)HttpStatusCode.BadRequest;
-					errorResponse = new ErrorResponse(response.StatusCode, ex.Message);
+					errorResponse.StatusCode = response.StatusCode;
+					errorResponse.Message = ex.Message;
+					errorResponse.StackTrace = ex.StackTrace;
 					break;
 				}
 				default: {
 					response.StatusCode = (int)HttpStatusCode.InternalServerError;
-					errorResponse = new ErrorResponse(response.StatusCode, exception.Message);
+					errorResponse.StatusCode = response.StatusCode;
+					errorResponse.Message = exception.Message;
+					errorResponse.StackTrace = exception.StackTrace;
 					break;
 				}
 			}
-			_logger.LogError(exception.Message);
+			//_logger.LogError(exception.Message);
 			var result = JsonConvert.SerializeObject(errorResponse);
 			await context.Response.WriteAsync(result);
 		}

@@ -72,18 +72,18 @@ namespace StudentApp.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2023, 6, 19, 14, 29, 48, 57, DateTimeKind.Local).AddTicks(5402),
+                            CreatedAt = new DateTime(2023, 6, 21, 13, 10, 6, 885, DateTimeKind.Local).AddTicks(2652),
                             IsDeleted = false,
                             Name = "Student",
-                            UpdatedAt = new DateTime(2023, 6, 19, 14, 29, 48, 57, DateTimeKind.Local).AddTicks(5413)
+                            UpdatedAt = new DateTime(2023, 6, 21, 13, 10, 6, 885, DateTimeKind.Local).AddTicks(2661)
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2023, 6, 19, 14, 29, 48, 57, DateTimeKind.Local).AddTicks(5418),
+                            CreatedAt = new DateTime(2023, 6, 21, 13, 10, 6, 885, DateTimeKind.Local).AddTicks(2664),
                             IsDeleted = false,
                             Name = "Teacher",
-                            UpdatedAt = new DateTime(2023, 6, 19, 14, 29, 48, 57, DateTimeKind.Local).AddTicks(5418)
+                            UpdatedAt = new DateTime(2023, 6, 21, 13, 10, 6, 885, DateTimeKind.Local).AddTicks(2665)
                         });
                 });
 

@@ -1,35 +1,17 @@
-﻿namespace StudentApp.Model
+using StudentApp.Types;
+
+namespace StudentApp.Model
 {
-	public class ErrorResponse
+	public class CustomResponse : ICustomResponse
 	{
-		public int statusCode;
-		public bool success;
-		public string message;
+		private readonly ISuccess _success;
 
-		public ErrorResponse(int? statusCode, string? message)
-			=> new ErrorResponse(statusCode, message) {
-				statusCode = (int)statusCode,
-				success = false,
-				message = message ?? ""
-			};
-	}
+		public CustomResponse(ISuccess success)
+		{
+			_success = success;
+		}
 
-	public class SuccessResponse
-	{
-		//public int? statusCode;
-		//	public bool? success;
-		public string? message { get; set; }
-		//public dynamic? stackTrace;
-		public dynamic? result { get; set; }
-
-		//public SuccessResponse(dynamic? result, string? message)
-		////=> new SuccessResponse(result, message)
-		//{
-		//	result = result ?? null;
-		//	statusCode = (int)HttpStatusCode.OK;
-		//	success = true;
-		//	message = message ?? null;
-		//	stackTrace = null;
-		//}
+		public async Task<ISuccess> SuccessResponse(dynamic? result, string? message)
+			=> await _success.SuccessResponseFormat(result, message);
 	}
 }

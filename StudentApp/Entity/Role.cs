@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
 
 namespace StudentApp.Entity
 {
@@ -9,6 +11,8 @@ namespace StudentApp.Entity
 
 		public string Name { get; set; }
 
+		[JsonIgnore]
+		[IgnoreDataMember]
 		public ICollection<User> users { get; set; }
 	}
 }

@@ -7,7 +7,7 @@
 namespace StudentApp.Migrations
 {
 	/// <inheritdoc />
-	public partial class StudentApp : Migration
+	public partial class StudentDatabase : Migration
 	{
 		/// <inheritdoc />
 		protected override void Up(MigrationBuilder migrationBuilder)
@@ -125,8 +125,8 @@ namespace StudentApp.Migrations
 				columns: new[] { "id", "created_at", "deleted_at", "name" },
 				values: new object[,]
 				{
-					{ 1, new DateTime(2023, 6, 19, 14, 29, 48, 57, DateTimeKind.Local).AddTicks(5402), null, "Student" },
-					{ 2, new DateTime(2023, 6, 19, 14, 29, 48, 57, DateTimeKind.Local).AddTicks(5418), null, "Teacher" }
+					{ 1, new DateTime(2023, 6, 21, 13, 10, 6, 885, DateTimeKind.Local).AddTicks(2652), null, "Student" },
+					{ 2, new DateTime(2023, 6, 21, 13, 10, 6, 885, DateTimeKind.Local).AddTicks(2664), null, "Teacher" }
 				});
 
 			migrationBuilder.CreateIndex(
