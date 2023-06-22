@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using StudentApp.Model;
-using System.Diagnostics;
 using System.Net;
 
 namespace StudentApp.Exceptions
@@ -30,53 +29,55 @@ namespace StudentApp.Exceptions
 		{
 			context.Response.ContentType = "application/json";
 			var response = context.Response;
-			var errorResponse = new Error {
-				StatusCode = 0,
-				Message = "",
-				StackTrace = default(StackTrace)
-			};
+			var errorResponse = CustomResponse.ErrorResponse(response, exception);
 
 			switch (exception) {
 				case ApplicationException ex: {
 					response.StatusCode = (int)HttpStatusCode.BadRequest;
-					errorResponse.StatusCode = response.StatusCode;
-					errorResponse.Message = ex.Message;
-					errorResponse.StackTrace = ex.StackTrace;
+					errorResponse = CustomResponse.ErrorResponse(response, ex);
+					//errorResponse.StatusCode = response.StatusCode;
+					//errorResponse.Message = ex.Message;
+					//errorResponse.StackTrace = ex.StackTrace;
 					break;
 				}
 				case NotFoundException ex: {
 					response.StatusCode = (int)HttpStatusCode.NotFound;
-					errorResponse.StatusCode = response.StatusCode;
-					errorResponse.Message = ex.Message;
-					errorResponse.StackTrace = ex.StackTrace;
+					errorResponse = CustomResponse.ErrorResponse(response, ex);
+					//errorResponse.StatusCode = response.StatusCode;
+					//errorResponse.Message = ex.Message;
+					//errorResponse.StackTrace = ex.StackTrace;
 					break;
 				}
 				case UnAuthorizationAccessException ex: {
 					response.StatusCode = (int)HttpStatusCode.Unauthorized;
-					errorResponse.StatusCode = response.StatusCode;
-					errorResponse.Message = ex.Message;
-					errorResponse.StackTrace = ex.StackTrace;
+					errorResponse = CustomResponse.ErrorResponse(response, ex);
+					//errorResponse.StatusCode = response.StatusCode;
+					//errorResponse.Message = ex.Message;
+					//errorResponse.StackTrace = ex.StackTrace;
 					break;
 				}
 				case ForbiddenException ex: {
 					response.StatusCode = (int)HttpStatusCode.Forbidden;
-					errorResponse.StatusCode = response.StatusCode;
-					errorResponse.Message = ex.Message;
-					errorResponse.StackTrace = ex.StackTrace;
+					errorResponse = CustomResponse.ErrorResponse(response, ex);
+					//errorResponse.StatusCode = response.StatusCode;
+					//errorResponse.Message = ex.Message;
+					//errorResponse.StackTrace = ex.StackTrace;
 					break;
 				}
 				case BadRequestException ex: {
 					response.StatusCode = (int)HttpStatusCode.BadRequest;
-					errorResponse.StatusCode = response.StatusCode;
-					errorResponse.Message = ex.Message;
-					errorResponse.StackTrace = ex.StackTrace;
+					errorResponse = CustomResponse.ErrorResponse(response, ex);
+					//errorResponse.StatusCode = response.StatusCode;
+					//errorResponse.Message = ex.Message;
+					//errorResponse.StackTrace = ex.StackTrace;
 					break;
 				}
 				default: {
 					response.StatusCode = (int)HttpStatusCode.InternalServerError;
-					errorResponse.StatusCode = response.StatusCode;
-					errorResponse.Message = exception.Message;
-					errorResponse.StackTrace = exception.StackTrace;
+					errorResponse = CustomResponse.ErrorResponse(response, exception);
+					//errorResponse.StatusCode = response.StatusCode;
+					//errorResponse.Message = exception.Message;
+					//errorResponse.StackTrace = exception.StackTrace;
 					break;
 				}
 			}
