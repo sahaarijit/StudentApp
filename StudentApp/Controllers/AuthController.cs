@@ -47,7 +47,12 @@ namespace StudentApp.Controllers
 					Password = userDto.password
 				};
 				_context.Users.Add(user);
-				_context.SaveChanges();
+				try {
+					_context.SaveChanges();
+				}
+				catch {
+					throw new DbUpdateException("Same entity details");
+				}
 				_logger.LogInformation("Process completed...");
 				var data = await _response.SuccessResponse(user, "Registration successful");
 				return Ok(data);
@@ -157,13 +162,8 @@ namespace StudentApp.Controllers
 		[Route("getAllUsers")]
 		public async Task<IActionResult> Users()
 		{
-			try {
-				var data = await _response.SuccessResponse(_context.Users.Where(s => s.IsDeleted == false), "All users are fetched successfully");
-				return Ok(data);
-			}
-			catch (Exception ex) {
-				throw new UnAuthorizationAccessException(ex.Message);
-			}
+			var data = await _response.SuccessResponse(_context.Users.Where(s => s.IsDeleted == false), "All users are fetched successfully");
+			return Ok(data);
 		}
 
 		[HttpGet("{id}")]

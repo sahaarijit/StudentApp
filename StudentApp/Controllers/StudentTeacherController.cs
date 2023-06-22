@@ -33,7 +33,13 @@ namespace StudentApp.Controllers
 					TeacherId = studentTeacher.TeacherId
 				};
 				_context.StudentTeacher.Add(studentTeacher1);
-				_context.SaveChanges();
+				try {
+					_context.SaveChanges();
+				}
+				catch {
+					throw new DbUpdateException("Same entity details");
+				}
+
 				var data = await _response.SuccessResponse(studentTeacher1, "Student and teacher are assigned to each other");
 				return Ok(data);
 			}

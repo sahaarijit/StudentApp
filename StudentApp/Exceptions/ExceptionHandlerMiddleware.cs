@@ -57,6 +57,11 @@ namespace StudentApp.Exceptions
 					errorResponse = CustomResponse.ErrorResponse(response, ex);
 					break;
 				}
+				case DbUpdateException ex: {
+					response.StatusCode = (int)HttpStatusCode.BadRequest;
+					errorResponse = CustomResponse.ErrorResponse(response, ex);
+					break;
+				}
 				default: {
 					response.StatusCode = (int)HttpStatusCode.InternalServerError;
 					errorResponse = CustomResponse.ErrorResponse(response, exception);

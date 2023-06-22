@@ -34,7 +34,13 @@ namespace StudentApp.Controllers
 					UserId = teacherDto.TeacherId
 				};
 				_context.Teachers.Add(Teacher);
-				_context.SaveChanges();
+				try {
+					_context.SaveChanges();
+				}
+				catch {
+					throw new DbUpdateException("Same entity details");
+				}
+
 				var data = await _response.SuccessResponse(Teacher, "Teacher Created successfully");
 				return Ok(data);
 			}
