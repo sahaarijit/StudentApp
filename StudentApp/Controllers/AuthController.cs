@@ -9,6 +9,7 @@ using StudentApp.Types;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
+
 namespace StudentApp.Controllers
 {
 	[Route("api/auth")]
@@ -157,13 +158,10 @@ namespace StudentApp.Controllers
 		[Route("getAllUsers")]
 		public async Task<IActionResult> Users()
 		{
-			try {
-				var data = await _response.SuccessResponse(_context.Users.Where(s => s.IsDeleted == false), "All users are fetched successfully");
-				return Ok(data);
-			}
-			catch (Exception ex) {
-				throw new UnAuthorizationAccessException(ex.Message);
-			}
+
+			var data = await _response.SuccessResponse(_context.Users.Where(s => s.IsDeleted == false), "All users are fetched successfully");
+			return Ok(data);
+
 		}
 
 		[HttpGet("{id}")]
