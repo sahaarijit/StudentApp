@@ -9,6 +9,7 @@ using StudentApp.Types;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
+
 namespace StudentApp.Controllers
 {
 	[Route("api/auth")]
@@ -181,7 +182,3 @@ namespace StudentApp.Controllers
 		}
 	}
 }
-
-
-
-
