@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
 
-namespace StudentApp.Entity
+namespace StudentApp.Core.Entities
 {
 	[Table("users")]
 	public class User : BaseEntity

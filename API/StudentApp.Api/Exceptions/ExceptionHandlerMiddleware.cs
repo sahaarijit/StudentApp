@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
-using StudentApp.Model;
+using StudentApp.Api.Model;
 using System.Net;
 
-namespace StudentApp.Exceptions
+namespace StudentApp.Api.Exceptions
 {
 	public class ExceptionHandlerMiddleware
 	{

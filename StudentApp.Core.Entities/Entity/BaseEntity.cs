@@ -1,4 +1,4 @@
-﻿namespace StudentApp.Entity
+﻿namespace StudentApp.Core.Entities
 {
 	public class BaseEntity
 	{

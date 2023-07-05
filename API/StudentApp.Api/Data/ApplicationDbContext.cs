@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using StudentApp.Entity;
-using StudentApp.EntityConfiguration;
+using StudentApp.Api.EntityConfiguration;
+using StudentApp.Core.Entities;
 
-namespace StudentApp.Data
+namespace StudentApp.Api.Data
 {
 	public class ApplicationDbContext : DbContext
 	{

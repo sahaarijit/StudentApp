@@ -1,6 +1,6 @@
-﻿using StudentApp.Types;
+﻿using StudentApp.Api.Types;
 
-namespace StudentApp.Model
+namespace StudentApp.Api.Model
 {
 	public class Error : IError
 	{

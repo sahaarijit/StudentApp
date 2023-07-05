@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using StudentApp.Data;
-using StudentApp.Dto;
-using StudentApp.Entity;
-using StudentApp.Exceptions;
-using StudentApp.Types;
+using StudentApp.Api.Data;
+using StudentApp.Api.Dto;
+using StudentApp.Api.Exceptions;
+using StudentApp.Api.Types;
+using StudentApp.Core.Entities;
 using System.IdentityModel.Tokens.Jwt;
 
-namespace StudentApp.Controllers
+namespace StudentApp.Api.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]

@@ -1,4 +1,4 @@
-﻿namespace StudentApp.Dto
+﻿namespace StudentApp.Api.Dto
 {
 	public class StudentTeacherDto
 	{

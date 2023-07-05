@@ -1,4 +1,4 @@
-﻿namespace StudentApp.Types
+﻿namespace StudentApp.Api.Types
 {
 	public interface IError { }
 }

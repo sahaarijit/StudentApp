@@ -1,6 +1,6 @@
-﻿using StudentApp.Exceptions;
+﻿using StudentApp.Api.Exceptions;
 
-namespace StudentApp.Configuration
+namespace StudentApp.Api.Configuration
 {
 	public static class ApplicationBuilderExtensions
 	{

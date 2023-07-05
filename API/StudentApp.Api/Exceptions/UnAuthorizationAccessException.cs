@@ -1,4 +1,4 @@
-﻿namespace StudentApp.Exceptions
+﻿namespace StudentApp.Api.Exceptions
 {
 	public class UnAuthorizationAccessException : Exception
 	{

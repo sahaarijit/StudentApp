@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace StudentApp.Entity
+namespace StudentApp.Core.Entities
 {
 	[Table("teachers")]
 	public class Teacher : BaseEntity

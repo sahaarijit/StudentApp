@@ -1,7 +1,7 @@
-﻿using StudentApp.Types;
+﻿using StudentApp.Api.Types;
 using System.Net;
 
-namespace StudentApp.Model
+namespace StudentApp.Api.Model
 {
 	public class Success : ISuccess
 	{

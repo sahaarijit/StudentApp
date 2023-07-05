@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using StudentApp.Entity;
+using StudentApp.Core.Entities;
 
-namespace StudentApp.EntityConfiguration
+namespace StudentApp.Api.EntityConfiguration
 {
 	public class StudentEntityConfiguration : IEntityTypeConfiguration<Student>
 	{

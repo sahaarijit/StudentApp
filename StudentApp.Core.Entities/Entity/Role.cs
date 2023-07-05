@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
 
-namespace StudentApp.Entity
+namespace StudentApp.Core.Entities
 {
 	[Table("roles")]
 	public class Role : BaseEntity

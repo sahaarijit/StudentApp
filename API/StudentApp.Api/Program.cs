@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using StudentApp.Configuration;
-using StudentApp.Data;
-using StudentApp.Model;
-using StudentApp.Types;
+using StudentApp.Api.Configuration;
+using StudentApp.Api.Data;
+using StudentApp.Api.Model;
+using StudentApp.Api.Types;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
